@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LangLearn</string>
+
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+
+    <string name="back4app_app_id">VMW0uqedh8cVTF5ZduWnLj7cXzLOszHghM0BafeU</string>
+    <string name="back4app_client_key">txeHzLtmdP8la62YKmGuker7Q4pzwIWU6KS2jBD6</string>
+
+</resources>
