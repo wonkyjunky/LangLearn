@@ -4,9 +4,9 @@ CST438 - Project 3
 
 # Description
 
-LangLearn is an android chat app that allows users to communicate in different languages.
-Users can post their blogs/chat in their local lanuages and LangLearn will translate them in selected language.
-So that Users can communicate without any language barriers.
+LangLearn is an android chat app that allows users to communicate in different languages.<br/>
+Users can post their blogs/chat in their local lanuages and LangLearn will translate them in selected language.<br/>
+So that Users can communicate without any language barriers.<br/>
 
 # Team Members
 
@@ -17,13 +17,13 @@ So that Users can communicate without any language barriers.
 
 # MVP
 
-- [] User can **create his/her account**
-- [] User can **login with his/her account**
-- [] User can **delete his/her account**
-- [] User can **post/chat with other users**
-- [] User can **see posts and messages**
-- [] User can **select a language to translate**
-- [] User can **navigate to other activities**
+- [ ] User can **create his/her account**
+- [ ] User can **login with his/her account**
+- [ ] User can **delete his/her account**
+- [ ] User can **post/chat with other users**
+- [ ] User can **see posts and messages**
+- [ ] User can **select a language to translate**
+- [ ] User can **navigate to other activities**
 
 # Timelines
 
