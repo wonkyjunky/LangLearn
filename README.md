@@ -40,7 +40,15 @@ So that Users can communicate without any language barriers.<br/>
 
 ## Week 4
 
-# WireFrame & ERD
+# Wireframe & ERD
+
+## Wireframe
+
+<img src="https://github.com/wonkyjunky/LangLearn/blob/master/wireframe.png" />
+
+## ERD & Flow chart
+
+<img src="https://github.com/wonkyjunky/LangLearn/blob/master/ERD.png" />
 
 ## Open-source libraries used
 
