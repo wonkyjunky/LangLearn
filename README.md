@@ -10,9 +10,9 @@ So that Users can communicate without any language barriers.<br/>
 
 # Team Members
 
-[Joseph Newman](https://github.com/jnkjnk)
-[Wonkyu Jeong](https://github.com/wonkyjunky)
-[Richard Ledbetter](https://github.com/richardLedbetter)
+[Joseph Newman](https://github.com/jnkjnk)<br/>
+[Wonkyu Jeong](https://github.com/wonkyjunky)<br/>
+[Richard Ledbetter](https://github.com/richardLedbetter)<br/>
 [Ike Hirzel](https://github.com/ikehirzel)
 
 # MVP
