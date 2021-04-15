@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 //                textView.setText(String.format("Data saved is: \n %s", firstObject.get("Message")));
 //            }
 //        });
-    }
+//    }
 
 
     /**
@@ -96,5 +96,5 @@ public class MainActivity extends AppCompatActivity {
 //            String resultWord = bundle.getString("resultWord");
 //            tvResult.setText(resultWord);
 //        }
-    };
+    }
 }
