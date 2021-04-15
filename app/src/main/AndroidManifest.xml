@@ -2,18 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.langlearn">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <meta-data
-        android:name="com.parse.SERVER_URL"
-        android:value="@string/back4app_server_url" /> <!-- Meta data for your file for application id -->
-    <meta-data
-        android:name="com.parse.APPLICATION_ID"
-        android:value="@string/back4app_app_id" /> <!-- Meta data for your file for client key -->
-    <meta-data
-        android:name="com.parse.CLIENT_KEY"
-        android:value="@string/back4app_client_key" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".App"
@@ -23,9 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LangLearn">
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,5 +21,19 @@
             </intent-filter>
         </activity>
     </application>
+
+    <meta-data
+        android:name="com.parse.SERVER_URL"
+        android:value="@string/back4app_server_url" />
+
+    <!--Meta data for your file for application id-->
+    <meta-data
+        android:name="com.parse.APPLICATION_ID"
+        android:value="@string/back4app_app_id" />
+
+    <!--Meta data for your file for client key-->
+    <meta-data
+        android:name="com.parse.CLIENT_KEY"
+        android:value="@string/back4app_client_key" />
 
 </manifest>
