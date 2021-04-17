@@ -7,5 +7,5 @@
     <string name="back4app_client_key">txeHzLtmdP8la62YKmGuker7Q4pzwIWU6KS2jBD6</string>
     <string name="papago_client_id">TpknL16lHWDKMusB4A2n</string>
     <string name="papago_client_key">zf79887h_w</string>
-	<string name="profile_greeting">Welcome!</Username></string>
+    <string name="profile_label">Profile</string>
 </resources>
