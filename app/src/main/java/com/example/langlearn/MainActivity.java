@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvResult;
 
     Button btTranslate;
+    Button profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
         tvResult = findViewById(R.id.tvResult);
+        profileButton = findViewById(R.id.main_profile_button);
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+        	@Override public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(), ProfileActivity.class);
+				startActivity(intent);
+        	}
+		});
 
         /**
          * This is eventlistener that get text from edittext and pass to
@@ -82,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 //                textView.setText(String.format("Data saved is: \n %s", firstObject.get("Message")));
 //            }
 //        });
-    }
+//    }
 
 
     /**
@@ -96,5 +106,10 @@ public class MainActivity extends AppCompatActivity {
 //            String resultWord = bundle.getString("resultWord");
 //            tvResult.setText(resultWord);
 //        }
+<<<<<<< HEAD
+    }
+}
+=======
     };
 //}
+>>>>>>> 154085833970ee9230ac911bfa91c05bacdd9a5a
