@@ -106,10 +106,5 @@ public class MainActivity extends AppCompatActivity {
 //            String resultWord = bundle.getString("resultWord");
 //            tvResult.setText(resultWord);
 //        }
-<<<<<<< HEAD
     }
 }
-=======
-    };
-//}
->>>>>>> 154085833970ee9230ac911bfa91c05bacdd9a5a

@@ -7,9 +7,7 @@
     <string name="back4app_client_key">txeHzLtmdP8la62YKmGuker7Q4pzwIWU6KS2jBD6</string>
     <string name="papago_client_id">TpknL16lHWDKMusB4A2n</string>
     <string name="papago_client_key">zf79887h_w</string>
-<<<<<<< HEAD
     <string name="profile_label">Profile</string>
-=======
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -20,5 +18,4 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
->>>>>>> 154085833970ee9230ac911bfa91c05bacdd9a5a
 </resources>
