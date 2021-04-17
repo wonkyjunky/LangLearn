@@ -1,5 +1,6 @@
 package com.example.langlearn;
 
+<<<<<<< HEAD
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -30,3 +31,17 @@ public class ProfileActivity extends AppCompatActivity {
 
 	}
 }
+=======
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+
+public class ProfileActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile);
+    }
+}
+>>>>>>> 154085833970ee9230ac911bfa91c05bacdd9a5a
