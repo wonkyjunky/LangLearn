@@ -11,7 +11,19 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void usernameSpecial_isCorrect() {
+        String username = "Reval@";
+        assertEquals(true, LoginActivity.checkuserName_if_it_has_special_character(username));
+    }
+    @Test
+    public void usernameTenCharacter_isCorrect() {
+        String username = "Revalfdjakfdjkafda";
+        assertEquals(true, LoginActivity.checkuserName_if_it_has_morethan_ten_characters(username));
+    }
+    @Test
+    public void usernameUpperCase_isCorrect() {
+        String username = "reval";
+        assertNotEquals(true, LoginActivity.checkuserName_upperCharacter(username));
     }
 }
+
