@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.langlearn.ui.login.LoginActivity;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -43,7 +44,11 @@ public class MainActivity extends AppCompatActivity {
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
         tvResult = findViewById(R.id.tvResult);
-
+        Button loginact = findViewById(R.id.loginact);
+        loginact.setOnClickListener(v1->{
+            Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        });
         btHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
