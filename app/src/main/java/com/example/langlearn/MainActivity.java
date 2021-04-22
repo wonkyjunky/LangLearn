@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,17 +24,61 @@ public class MainActivity extends AppCompatActivity {
     TextView tvResult;
 
     Button btTranslate;
+    Button btHome;
+    Button btMessage;
+    Button btPost;
+    Button btProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        btHome = findViewById(R.id.btHome);
+        btMessage = findViewById(R.id.btMessage);
+        btPost = findViewById(R.id.btPost);
+        btProfile = findViewById(R.id.btProfile);
 
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
         tvResult = findViewById(R.id.tvResult);
+
+
+        btHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        btMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, MessageActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        btPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, PostActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        btProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         /**
          * This is eventlistener that get text from edittext and pass to
@@ -96,5 +141,8 @@ public class MainActivity extends AppCompatActivity {
 //            String resultWord = bundle.getString("resultWord");
 //            tvResult.setText(resultWord);
 //        }
+
+
+
     };
 //}

@@ -20,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".PostActivity" />
+        <activity android:name=".ProfileActivity" />
     </application>
 
     <meta-data
