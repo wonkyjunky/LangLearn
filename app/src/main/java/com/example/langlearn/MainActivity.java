@@ -25,21 +25,13 @@ public class MainActivity extends AppCompatActivity {
     TextView tvResult;
 
     Button btTranslate;
-    Button btHome;
-    Button btMessage;
-    Button btPost;
-    Button btProfile;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btHome = findViewById(R.id.btHome);
-        btMessage = findViewById(R.id.btMessage);
-        btPost = findViewById(R.id.btPost);
-        btProfile = findViewById(R.id.btProfile);
+
 
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
@@ -49,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         });
-        btHome.setOnClickListener(new View.OnClickListener() {
+       /* btHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, MainActivity.class);
@@ -83,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        });
+        });*/
 
         /**
          * This is eventlistener that get text from edittext and pass to
@@ -132,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 //                textView.setText(String.format("Data saved is: \n %s", firstObject.get("Message")));
 //            }
 //        });
-//    }
+    }
 
 
     /**
@@ -146,5 +138,5 @@ public class MainActivity extends AppCompatActivity {
 //            String resultWord = bundle.getString("resultWord");
 //            tvResult.setText(resultWord);
 //        }
-    }
-}
+    };
+//}
