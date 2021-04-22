@@ -21,6 +21,11 @@
             </intent-filter>
         </activity>
 		<activity android:name=".ProfileActivity" />
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".PostActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignupActivity" />
+
     </application>
 
     <meta-data
