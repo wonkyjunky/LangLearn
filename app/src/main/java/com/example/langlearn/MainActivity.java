@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.langlearn.ui.login.LoginActivity;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -32,11 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Button sign_in = findViewById(R.id.Signin);
-        sign_in.setOnClickListener(v1->{
-            Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        });
+
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
         tvResult = findViewById(R.id.tvResult);

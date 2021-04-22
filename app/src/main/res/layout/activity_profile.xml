@@ -1,9 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<TextView
+		android:id="@+id/profile_greeting_text"
+		android:layout_width="203dp"
+		android:layout_height="76dp"
+		android:layout_marginTop="60dp"
+		android:gravity="center"
+		android:textSize="28sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.593"
+		app:layout_constraintStart_toEndOf="@+id/profile_img"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<ImageView
+		android:id="@+id/profile_img"
+		android:layout_width="128dp"
+		android:layout_height="128dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="16dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:srcCompat="@tools:sample/avatars" />
+
+	<TextView
+		android:id="@+id/profile_descr_text"
+		android:layout_width="245dp"
+		android:layout_height="218dp"
+		android:layout_marginTop="68dp"
+		android:textSize="18sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/profile_img" />
+
+	<Button
+		android:id="@+id/btHome"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="10dp"
+		android:text="Home"
+		app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
+		app:layout_constraintEnd_toStartOf="@+id/btMessage"
+		app:layout_constraintStart_toStartOf="@+id/bottomAppBar" />
+
+	<Button
+		android:id="@+id/btProfile"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Profile"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="@+id/bottomAppBar" />
+
+	<Button
+		android:id="@+id/btPost"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="10dp"
+		android:text="Post"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toStartOf="@+id/btProfile" />
+
+	<Button
+		android:id="@+id/btMessage"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="10dp"
+		android:text="Message"
+		app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
+		app:layout_constraintEnd_toStartOf="@+id/btPost" />
+
+
+	<com.google.android.material.bottomappbar.BottomAppBar
+		android:id="@+id/bottomAppBar"
+		style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.0"
+		app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
