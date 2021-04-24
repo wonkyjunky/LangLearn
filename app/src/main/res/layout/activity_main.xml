@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="226dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="92dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/etTranslate"
+        app:layout_constraintEnd_toEndOf="@+id/include" />
+
     <EditText
         android:id="@+id/etTranslate"
         android:layout_width="wrap_content"
@@ -48,6 +58,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTranslate" />
 
-    <include layout="@layout/navbar"/>
+    <include
+        android:id="@+id/include"
+        layout="@layout/navbar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="33dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
