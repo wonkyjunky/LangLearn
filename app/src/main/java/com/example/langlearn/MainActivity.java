@@ -1,84 +1,27 @@
 package com.example.langlearn;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseObject;
+import com.example.langlearn.ui.login.LangLearnActivity;
 
-import org.w3c.dom.Text;
+public class MainActivity extends LangLearnActivity {
 
-public class MainActivity extends AppCompatActivity {
     EditText etTranslate;
     TextView tvResult;
-
     Button btTranslate;
-    Button btHome;
-    Button btMessage;
-    Button btPost;
-    Button btProfile;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        btHome = findViewById(R.id.btHome);
-        btMessage = findViewById(R.id.btMessage);
-        btPost = findViewById(R.id.btPost);
-        btProfile = findViewById(R.id.btProfile);
+        initInterface();
 
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
         tvResult = findViewById(R.id.tvResult);
-
-        btHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        btMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, MessageActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        btPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, PostActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        btProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
 
         /**
          * This is eventlistener that get text from edittext and pass to

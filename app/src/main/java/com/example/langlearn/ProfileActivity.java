@@ -10,16 +10,11 @@ public class ProfileActivity extends LangLearnActivity {
 	private TextView greetingText;
 	private TextView descrText;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-//		homeButton = findViewById(R.id.nav_home_button);
-//		messageButton = findViewById(R.id.nav_message_button);
-//		postButton = findViewById(R.id.nav_post_button);
-//		profileButton = findViewById(R.id.nav_profile_button);
-		createButtons();
+		initInterface();
 
 		greetingText = findViewById(R.id.profile_greeting_text);
 		descrText = findViewById(R.id.profile_descr_text);

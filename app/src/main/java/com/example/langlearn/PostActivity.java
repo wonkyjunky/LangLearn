@@ -1,64 +1,16 @@
 package com.example.langlearn;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
-public class PostActivity extends AppCompatActivity {
+import com.example.langlearn.ui.login.LangLearnActivity;
 
-    Button btHome;
-    Button btMessage;
-    Button btPost;
-    Button btProfile;
-
+public class PostActivity extends LangLearnActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+        initInterface();
 
-        btHome = findViewById(R.id.btHome);
-        btMessage = findViewById(R.id.btMessage);
-        btPost = findViewById(R.id.btPost);
-        btProfile = findViewById(R.id.btProfile);
-
-        btHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(PostActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        btMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(PostActivity.this, MessageActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        btPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(PostActivity.this, PostActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        btProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(PostActivity.this, ProfileActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
     }
 }

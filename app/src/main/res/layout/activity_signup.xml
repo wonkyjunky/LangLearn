@@ -6,4 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".SignupActivity">
 
+    <include layout="@layout/navbar"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

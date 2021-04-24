@@ -19,7 +19,7 @@ public abstract class LangLearnActivity extends AppCompatActivity {
     protected Button postButton;
     protected Button profileButton;
 
-    protected void createButtons() {
+    protected void initInterface() {
 
         homeButton = findViewById(R.id.nav_home_button);
         messageButton = findViewById(R.id.nav_message_button);
