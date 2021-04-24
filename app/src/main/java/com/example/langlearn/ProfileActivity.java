@@ -3,20 +3,17 @@ package com.example.langlearn;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.net.URL;
 
 public class ProfileActivity extends LangLearnActivity {
-
-	public static final String CLASS_NAME = "ProfileActivity";
 
 	private TextView greetingText;
 	private TextView descrText;
@@ -51,34 +48,32 @@ public class ProfileActivity extends LangLearnActivity {
 			}
 		}.start();
 
-		userId = "Dn3hAiLmnl";
+		userId = "CABSdzlZz2";
 
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
 
-		query.getInBackground(userId, new GetCallback<ParseObject>() {
+		query.getInBackground(userId, new GetCallback<ParseUser>() {
 
-			@Override public void done(ParseObject o, ParseException e) {
-				Log.e(CLASS_NAME, this.getClass().getSimpleName());
+			@Override public void done(ParseUser o, ParseException e) {
+
 				if (e == null) {
 
 					String username = o.getString("username");
 					String language = o.getString("nativelang");
-					String descr = "This user speaks " + language;
+					String descr = "Native Language: " + langNameFromCode(language);
 					updateUi(username, descr);
 
 				} else {
 					// Error
 					logError("Failed to create query!");
-					//e.printStackTrace();
+					e.printStackTrace();
 
 				}
 			}
 		});
-
-
 	}
 
-	public void updateUi(String username, String descr) {
+	private void updateUi(String username, String descr) {
 		runOnUiThread(new Runnable() {
 			@Override public void run() {
 				greetingText.setText("Welcome, " + username + "!");
@@ -86,6 +81,5 @@ public class ProfileActivity extends LangLearnActivity {
 			}
 		});
 	}
-
 }
 

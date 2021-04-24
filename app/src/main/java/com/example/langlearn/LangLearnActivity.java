@@ -86,4 +86,17 @@ public abstract class LangLearnActivity extends AppCompatActivity {
     protected void logInfo(String info) {
         Log.i(this.getClass().getSimpleName(), info);
     }
+
+    public static String langNameFromCode(String langCode) {
+
+        switch (langCode) {
+
+            case "de":
+                return "German";
+            case "en":
+                return "English";
+            default:
+                return "None";
+        }
+    }
 }
