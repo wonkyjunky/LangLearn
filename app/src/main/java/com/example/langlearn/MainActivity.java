@@ -82,10 +82,13 @@ public class MainActivity extends LangLearnActivity {
                         String word = etTranslate.getText().toString();
                         Menu_Papago papago = new Menu_Papago();
                         String resultWord;
-                        if (source != "ko"){
+                        if (!source.equals("ko") && target != "ko"){
                             word = papago.getTranslation(word, source, "ko");
+                            resultWord = papago.getTranslation(word, "ko", target);
+                        } else {
+                            resultWord = papago.getTranslation(word, source, "ko");
                         }
-                        resultWord = papago.getTranslation(word, "ko", target);
+
 
                         Bundle papagoBundle = new Bundle();
                         papagoBundle.putString("resultWord", resultWord);
@@ -140,7 +143,7 @@ public class MainActivity extends LangLearnActivity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if (parent.getItemAtPosition(position).toString().equals("German")) {
-                target = "ge";
+                target = "de";
             } else if (parent.getItemAtPosition(position).toString().equals("Spanish")){
                 target = "es";
             } else if (parent.getItemAtPosition(position).toString().equals("French")){
@@ -164,6 +167,7 @@ public class MainActivity extends LangLearnActivity {
             } else if (parent.getItemAtPosition(position).toString().equals("English")){
                 target = "en";
             }
+            Toast.makeText(MainActivity.this, parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
         }
 
         @Override
