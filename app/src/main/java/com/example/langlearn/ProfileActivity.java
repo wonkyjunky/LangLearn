@@ -48,6 +48,7 @@ public class ProfileActivity extends LangLearnActivity {
 			}
 		}.start();
 
+		// test user Id
 		userId = "CABSdzlZz2";
 
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
