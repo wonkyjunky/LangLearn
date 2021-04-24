@@ -7,9 +7,16 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import java.net.URL;
 
 public class ProfileActivity extends LangLearnActivity {
+
+	public static final String CLASS_NAME = "ProfileActivity";
 
 	private TextView greetingText;
 	private TextView descrText;
@@ -20,17 +27,14 @@ public class ProfileActivity extends LangLearnActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 		initInterface();
-
 		greetingText = findViewById(R.id.profile_greeting_text);
 		descrText = findViewById(R.id.profile_descr_text);
 		profileImage = findViewById(R.id.profile_img);
-		
+
 		// Horrible horrible disgusting callback mess to download image and change imageview
 		new Thread() {
 			@Override public void run() {
 				try {
-
-					Log.i("Hello", "My Guy");
 					URL imageUrl = new URL("https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png");
 					Bitmap bmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
 					runOnUiThread(new Runnable() {
@@ -47,19 +51,41 @@ public class ProfileActivity extends LangLearnActivity {
 			}
 		}.start();
 
+		userId = "Dn3hAiLmnl";
+
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+
+		query.getInBackground(userId, new GetCallback<ParseObject>() {
+
+			@Override public void done(ParseObject o, ParseException e) {
+				Log.e(CLASS_NAME, this.getClass().getSimpleName());
+				if (e == null) {
+
+					String username = o.getString("username");
+					String language = o.getString("nativelang");
+					String descr = "This user speaks " + language;
+					updateUi(username, descr);
+
+				} else {
+					// Error
+					logError("Failed to create query!");
+					//e.printStackTrace();
+
+				}
+			}
+		});
 
 
-		// https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png
-
-		//
-		// Code to get account info in which name and descr would be set
-		//
-
-		String name = "Ike";
-		String descr = "This is a placeholder description for the profile page";
-
-		greetingText.setText("Welcome, " + name + "!");
-		descrText.setText(descr);
 	}
+
+	public void updateUi(String username, String descr) {
+		runOnUiThread(new Runnable() {
+			@Override public void run() {
+				greetingText.setText("Welcome, " + username + "!");
+				descrText.setText(descr);
+			}
+		});
+	}
+
 }
 

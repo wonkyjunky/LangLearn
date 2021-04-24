@@ -2,6 +2,7 @@ package com.example.langlearn;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -16,10 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public abstract class LangLearnActivity extends AppCompatActivity {
 
+    // UI elements
     protected Button homeButton;
     protected Button messageButton;
     protected Button postButton;
     protected Button profileButton;
+
+    // credentials
+    protected String userId;
 
     protected void initInterface() {
 
@@ -72,5 +77,13 @@ public abstract class LangLearnActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    protected void logError(String err) {
+        Log.e(this.getClass().getSimpleName(), err);
+    }
+
+    protected void logInfo(String info) {
+        Log.i(this.getClass().getSimpleName(), info);
     }
 }

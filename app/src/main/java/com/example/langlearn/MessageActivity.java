@@ -13,6 +13,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 public class MessageActivity extends LangLearnActivity {
+
     EditText text;
     Button send;
     Button retrieve;
