@@ -28,13 +28,12 @@ public class MainActivity extends LangLearnActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initInterface();
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-
-
 
         List<String> languages = new ArrayList<String>();
         languages.add("Select a Language");
