@@ -37,52 +37,6 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/profile_img" />
 
-	<Button
-		android:id="@+id/btHome"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginEnd="10dp"
-		android:text="Home"
-		app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
-		app:layout_constraintEnd_toStartOf="@+id/btMessage"
-		app:layout_constraintStart_toStartOf="@+id/bottomAppBar" />
-
-	<Button
-		android:id="@+id/btProfile"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Profile"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="@+id/bottomAppBar" />
-
-	<Button
-		android:id="@+id/btPost"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginEnd="10dp"
-		android:text="Post"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toStartOf="@+id/btProfile" />
-
-	<Button
-		android:id="@+id/btMessage"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginEnd="10dp"
-		android:text="Message"
-		app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
-		app:layout_constraintEnd_toStartOf="@+id/btPost" />
-
-
-	<com.google.android.material.bottomappbar.BottomAppBar
-		android:id="@+id/bottomAppBar"
-		style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="bottom"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.0"
-		app:layout_constraintStart_toStartOf="parent" />
+	<include layout="@layout/navbar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
