@@ -23,7 +23,7 @@ public class MainActivity extends LangLearnActivity {
     EditText etTranslate;
     TextView tvResult;
     Button btTranslate;
-    String source = "en";
+    String source = "en"; // default = English, but after we need to get native lanuage of the user from user database.
     String target;
 
     @Override
@@ -66,9 +66,13 @@ public class MainActivity extends LangLearnActivity {
         /**
          * This is eventlistener that get text from edittext and pass to
          * papago_handler
+         *
+         *
+         * when translation is not supported directly, it translate the source language to korean and then
+         * translate it to the destination language.
+         * So It needs 2 API calls. but need to come up with better algorithm even though it works fine.
+         * now it's wasting an api call when english -> french, english-> chinese ... etc.
          */
-
-
         btTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,6 +161,8 @@ public class MainActivity extends LangLearnActivity {
                 target = "it";
             } else if (parent.getItemAtPosition(position).toString().equals("Indonesian")){
                 target = "id";
+            } else if (parent.getItemAtPosition(position).toString().equals("English")){
+                target = "en";
             }
         }
 
