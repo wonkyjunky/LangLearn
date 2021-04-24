@@ -3,8 +3,6 @@ package com.example.langlearn;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.langlearn.ui.login.LangLearnActivity;
-
 public class ProfileActivity extends LangLearnActivity {
 
 	private TextView greetingText;

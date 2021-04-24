@@ -5,8 +5,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.langlearn.ui.login.LangLearnActivity;
-
 public class MainActivity extends LangLearnActivity {
 
     EditText etTranslate;

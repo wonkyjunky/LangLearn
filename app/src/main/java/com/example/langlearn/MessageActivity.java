@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.langlearn.ui.login.LangLearnActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
