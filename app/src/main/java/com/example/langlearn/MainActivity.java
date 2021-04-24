@@ -23,7 +23,6 @@ public class MainActivity extends LangLearnActivity {
     EditText etTranslate;
     TextView tvResult;
     Button btTranslate;
-    String source = "en"; // default = English, but after we need to get native lanuage of the user from user database.
     String target;
 
     @Override
@@ -31,7 +30,15 @@ public class MainActivity extends LangLearnActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // init universal app bar
         initInterface();
+
+        //
+        // Sets test user id for all acitivities as it is a static variable
+        // This is only being used in liu of a proper login function
+        // This should be removed as soon as possible
+        userId = "CABSdzlZz2";
+        getUserInfo();
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
@@ -78,14 +85,18 @@ public class MainActivity extends LangLearnActivity {
                 new Thread() {
                     @Override
                     public void run() {
+                        if (langCode == null) {
+                            logError("User info has not been gathered! Source langauge not set!");
+                            return;
+                        }
                         String word = etTranslate.getText().toString();
                         Menu_Papago papago = new Menu_Papago();
                         String resultWord;
-                        if (!source.equals("ko") && target != "ko"){
-                            word = papago.getTranslation(word, source, "ko");
+                        if (!langCode.equals("ko") && target != "ko"){
+                            word = papago.getTranslation(word, langCode, "ko");
                             resultWord = papago.getTranslation(word, "ko", target);
                         } else {
-                            resultWord = papago.getTranslation(word, source, "ko");
+                            resultWord = papago.getTranslation(word, langCode, "ko");
                         }
 
 

@@ -6,11 +6,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
 import java.net.URL;
 
 public class ProfileActivity extends LangLearnActivity {
@@ -48,30 +43,10 @@ public class ProfileActivity extends LangLearnActivity {
 			}
 		}.start();
 
-		// test user Id
-		userId = "CABSdzlZz2";
+		if (username != null && langCode != null) {
 
-		ParseQuery<ParseUser> query = ParseUser.getQuery();
-
-		query.getInBackground(userId, new GetCallback<ParseUser>() {
-
-			@Override public void done(ParseUser o, ParseException e) {
-
-				if (e == null) {
-
-					String username = o.getString("username");
-					String language = o.getString("nativelang");
-					String descr = "Native Language: " + langNameFromCode(language);
-					updateUi(username, descr);
-
-				} else {
-					// Error
-					logError("Failed to create query!");
-					e.printStackTrace();
-
-				}
-			}
-		});
+			updateUi(username, "Native Language: " + langNameFromCode(langCode));
+		}
 	}
 
 	private void updateUi(String username, String descr) {
