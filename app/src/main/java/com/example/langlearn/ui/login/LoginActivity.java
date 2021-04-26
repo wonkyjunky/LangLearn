@@ -33,7 +33,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.parse.ParseUser;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
@@ -82,7 +84,11 @@ public class LoginActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Log.d("works","finally");
+            Log.d("works",account.getDisplayName());
+            Map<String, String> authData = new HashMap<String, String>();
+            authData.put("access_token", account.getIdToken());
+            authData.put("id", account.getId());
+            ParseUser.logInWithInBackground("google", authData);
             // Signed in successfully, show authenticated UI.
 
         } catch (ApiException e) {
