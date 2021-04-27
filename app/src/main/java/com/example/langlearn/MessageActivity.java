@@ -22,7 +22,7 @@ public class MessageActivity extends LangLearnActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        initInterface();
+        initNavBar();
 
         int userCount = 1;
         String[] Users = new String[userCount];

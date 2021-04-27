@@ -19,9 +19,6 @@ import androidx.annotation.NonNull;
 import com.example.langlearn.ui.login.LoginActivity;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends LangLearnActivity {
 
     EditText etTranslate;
@@ -33,6 +30,7 @@ public class MainActivity extends LangLearnActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (ParseUser.getCurrentUser() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -40,25 +38,27 @@ public class MainActivity extends LangLearnActivity {
         } else {
             logInfo("Currently logged in: " + ParseUser.getCurrentUser().getUsername());
         }
-        // init universal app bar
-        initInterface();
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
-        List<String> languages = new ArrayList<String>();
-        languages.add("Select a Language");
-        languages.add("English");
-        languages.add("Spanish");
-        languages.add("French");
-        languages.add("German");
-        languages.add("Korean");
-        languages.add("Japanese");
-        languages.add("Simple Chinese");
-        languages.add("Traditional Chinese");
-        languages.add("Vietnamese");
-        languages.add("Russian");
-        languages.add("Italian");
-        languages.add("Indonesian");
+        // init universal app bar
+        initNavBar();
+
+        String[] languages = {
+            "Select a Language",
+            "English",
+            "Spanish",
+            "French",
+            "German",
+            "Korean",
+            "Japanese",
+            "Simple Chinese",
+            "Traditional Chinese",
+            "Vietnamese",
+            "Russian",
+            "Italian",
+            "Indonesian"
+        };
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

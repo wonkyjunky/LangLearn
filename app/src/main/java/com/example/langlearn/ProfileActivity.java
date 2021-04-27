@@ -26,7 +26,7 @@ public class ProfileActivity extends LangLearnActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-		initInterface();
+		initNavBar();
 
 		logoutButton = findViewById(R.id.profile_logout_button);
 		greetingText = findViewById(R.id.profile_greeting_text);
@@ -39,7 +39,7 @@ public class ProfileActivity extends LangLearnActivity {
 		new Thread() {
 			@Override public void run() {
 			try {
-				URL imageUrl = new URL("https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png");
+				URL imageUrl = new URL(ParseUser.getCurrentUser().getString("profileimg"));
 				Bitmap bmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
 				runOnUiThread(new Runnable() {
 					@Override public void run() {

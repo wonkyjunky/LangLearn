@@ -28,7 +28,7 @@ public abstract class LangLearnActivity extends AppCompatActivity {
 //        super.onCreate(savedInstanceState);
 //    }
 
-    protected void initInterface() {
+    protected void initNavBar() {
 
         Context currentContext = this;
         homeButton = findViewById(R.id.nav_home_button);
