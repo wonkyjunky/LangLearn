@@ -27,7 +27,6 @@ public class MainActivity extends LangLearnActivity {
     EditText etTranslate;
     TextView tvResult;
     Button btTranslate;
-    Button loginButton;
     String target;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +37,11 @@ public class MainActivity extends LangLearnActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
+        } else {
+            logInfo("Currently logged in: " + ParseUser.getCurrentUser().getUsername());
         }
         // init universal app bar
         initInterface();
-        Button tmp = findViewById(R.id.logincorr);
-        tmp.setOnClickListener(v1->{
-            Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        });
-        //
-        // Sets test user id for all acitivities as it is a static variable
-        // This is only being used in liu of a proper login function
-        // This should be removed as soon as possible
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
@@ -77,7 +69,6 @@ public class MainActivity extends LangLearnActivity {
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
         tvResult = findViewById(R.id.tvResult);
-        loginButton = findViewById(R.id.main_login_button);
 
         /**
          * This is eventlistener that get text from edittext and pass to
@@ -121,14 +112,6 @@ public class MainActivity extends LangLearnActivity {
                         papago_handler.sendMessage(msg);
                     }
                 }.start();
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                startActivity(intent);
             }
         });
 

@@ -34,7 +34,6 @@ public class LoginActivity extends LangLearnActivity {
     ParseUser user;
 
     private Button loginButton;
-    private Button logoutButton;
     private TextView usernameText;
     private TextView passwordText;
 
@@ -45,7 +44,6 @@ public class LoginActivity extends LangLearnActivity {
         setContentView(R.layout.activity_login);
 
         loginButton = findViewById(R.id.login_button);
-        logoutButton = findViewById(R.id.login_logout_button);
         usernameText = findViewById(R.id.login_username_text);
         passwordText = findViewById(R.id.login_password_text);
 
@@ -88,8 +86,6 @@ public class LoginActivity extends LangLearnActivity {
         signInButton.setOnClickListener(v1->{signIn();});
 
         loginButton.setOnClickListener(oc -> { logIn(); });
-        logoutButton.setOnClickListener(v1 -> { logOut(); });
-
     }
 
     private void logIn() {
@@ -128,13 +124,6 @@ public class LoginActivity extends LangLearnActivity {
         });
 
         Log.i("LoginActivity", "Login button pressed");
-    }
-
-    private void logOut() {
-        Log.i("LoginActivity", "Log out button pressed");
-        String username = ParseUser.getCurrentUser().getString("username");
-        Toast.makeText(this, "Logging out user: " + username, Toast.LENGTH_SHORT).show();
-        ParseUser.logOutInBackground();
     }
 
     @Override
