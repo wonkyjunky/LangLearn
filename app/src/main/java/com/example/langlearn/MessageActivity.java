@@ -22,13 +22,14 @@ public class MessageActivity extends LangLearnActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        initInterface();
+        initNavBar();
 
         int userCount = 1;
         String[] Users = new String[userCount];
         text = findViewById(R.id.editTextTextMultiLine);
         send = findViewById(R.id.sendButton);
         retrieve = findViewById(R.id.buttonRetrieve);
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

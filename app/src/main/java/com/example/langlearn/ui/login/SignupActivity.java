@@ -4,40 +4,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.langlearn.LangLearnActivity;
 import com.example.langlearn.MainActivity;
 import com.example.langlearn.R;
 import com.parse.ParseUser;
 
-public class LoginActivity extends LangLearnActivity {
+public class SignupActivity extends LangLearnActivity {
 
     private TextView usernameText;
     private TextView passwordText;
-    private Button loginButton;
     private Button signupButton;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_signup);
 
-        // initializing ui elements
-        usernameText = findViewById(R.id.login_username_text);
-        passwordText = findViewById(R.id.login_password_text);
-        loginButton = findViewById(R.id.login_button);
-        signupButton = findViewById(R.id.login_signup_button);
+        usernameText = findViewById(R.id.signup_username_text);
+        passwordText = findViewById(R.id.signup_password_text);
+        signupButton = findViewById(R.id.signup_button);
 
-        // setting click listeners
-        loginButton.setOnClickListener(oc -> { logIn(); });
-        signupButton.setOnClickListener(oc -> {
-            startActivity(new Intent(this, SignupActivity.class));
-            finish();
-        });
+        signupButton.setOnClickListener(oc -> { signUp(); });
+
     }
 
-    private void logIn() {
-
+    private void signUp() {
         // get username and password from ui
         String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
@@ -59,20 +51,34 @@ public class LoginActivity extends LangLearnActivity {
         // if either was invalid, do no more
         if (incomplete) return;
 
-        // attempt login with current credentials
-        ParseUser.logInInBackground(username, password, (user, e) -> {
+        //
+        // TODO: Code to get language (likely in a spinner)
+        //
 
+        //
+        // TODO: Code to get profile image (gallery or link)
+        //
+
+        ParseUser user = new ParseUser();
+        // setting credentials
+        user.setUsername(username);
+        user.setPassword(password);
+
+        user.signUpInBackground(e -> {
             if (e != null) {
-                logError("Login failed: " + e.getMessage());
                 usernameText.setError(e.getMessage());
+                logError("Sign up failed: " + e.getMessage());
                 return;
             }
-            logInfo("Login successful");
+
+            logInfo("Sign up successful for user: " + username);
+            Toast.makeText(this, "Signed up user: " + username, Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
-
         });
+
     }
+
 }
