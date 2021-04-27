@@ -63,14 +63,11 @@ public class SignupActivity extends LangLearnActivity {
 
         logInfo("User has language: " + langCode);
 
-        //
-        // TODO: Code to get profile image (gallery or link)
-        //
-
         ParseUser user = new ParseUser();
         // setting credentials
         user.setUsername(username);
         user.setPassword(password);
+        user.put("nativelang", langCode);
 
         user.signUpInBackground(e -> {
             if (e != null) {
