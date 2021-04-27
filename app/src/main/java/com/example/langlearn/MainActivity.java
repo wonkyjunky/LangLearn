@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.langlearn.ui.login.LoginActivity;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,11 @@ public class MainActivity extends LangLearnActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (ParseUser.getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
         // init universal app bar
         initInterface();
         Button tmp = findViewById(R.id.logincorr);
@@ -44,7 +50,7 @@ public class MainActivity extends LangLearnActivity {
         // Sets test user id for all acitivities as it is a static variable
         // This is only being used in liu of a proper login function
         // This should be removed as soon as possible
-        userId = "CABSdzlZz2";
+
         getUserInfo();
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);

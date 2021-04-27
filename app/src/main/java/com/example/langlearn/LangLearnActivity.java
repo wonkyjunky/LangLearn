@@ -30,9 +30,13 @@ public abstract class LangLearnActivity extends AppCompatActivity {
 
     // info for logged in user
     protected static String userId;
-    protected static String username;
+    protected static String usernameSave;
     protected static String langCode;
 
+//
+//    @Override protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//    }
 
     protected void initInterface() {
 
@@ -103,7 +107,7 @@ public abstract class LangLearnActivity extends AppCompatActivity {
                 if (e == null) {
 
                     logInfo("Successfully got user info");
-                    username = o.getString("username");
+                    usernameSave = o.getString("username");
                     langCode = o.getString("nativelang");
 
                 } else {

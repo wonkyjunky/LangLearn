@@ -19,6 +19,7 @@ public class ProfileActivity extends LangLearnActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 		initInterface();
+
 		greetingText = findViewById(R.id.profile_greeting_text);
 		descrText = findViewById(R.id.profile_descr_text);
 		profileImage = findViewById(R.id.profile_img);
@@ -43,9 +44,9 @@ public class ProfileActivity extends LangLearnActivity {
 			}
 		}.start();
 
-		if (username != null && langCode != null) {
+		if (usernameSave != null && langCode != null) {
 
-			updateUi(username, "Native Language: " + langNameFromCode(langCode));
+			updateUi(usernameSave, "Native Language: " + langNameFromCode(langCode));
 		}
 	}
 
