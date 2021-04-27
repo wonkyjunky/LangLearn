@@ -23,7 +23,7 @@ public class ProfileActivity extends LangLearnActivity {
 		descrText = findViewById(R.id.profile_descr_text);
 		profileImage = findViewById(R.id.profile_img);
 
-		// Horrible horrible disgusting callback mess to download image and change imageview
+		// Horrible disgusting callback mess to download image and change imageview
 		new Thread() {
 			@Override public void run() {
 				try {

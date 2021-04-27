@@ -26,6 +26,7 @@ public class MainActivity extends LangLearnActivity {
     EditText etTranslate;
     TextView tvResult;
     Button btTranslate;
+    Button loginButton;
     String target;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class MainActivity extends LangLearnActivity {
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
         tvResult = findViewById(R.id.tvResult);
+        loginButton = findViewById(R.id.main_login_button);
 
         /**
          * This is eventlistener that get text from edittext and pass to
@@ -112,6 +114,14 @@ public class MainActivity extends LangLearnActivity {
                         papago_handler.sendMessage(msg);
                     }
                 }.start();
+            }
+        });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                startActivity(intent);
             }
         });
 
