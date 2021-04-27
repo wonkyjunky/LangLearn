@@ -29,6 +29,7 @@ public class MessageActivity extends LangLearnActivity {
         text = findViewById(R.id.editTextTextMultiLine);
         send = findViewById(R.id.sendButton);
         retrieve = findViewById(R.id.buttonRetrieve);
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

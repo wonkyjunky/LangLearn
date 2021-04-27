@@ -25,8 +25,7 @@ public class MainActivity extends LangLearnActivity {
     Button btTranslate;
     String target;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -62,8 +61,6 @@ public class MainActivity extends LangLearnActivity {
         spinner.setAdapter(dataAdapter);
 
         spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-
-
 
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
