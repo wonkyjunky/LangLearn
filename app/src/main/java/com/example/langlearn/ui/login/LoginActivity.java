@@ -45,6 +45,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.parse.ParseUser;
@@ -166,7 +167,20 @@ public class LoginActivity extends AppCompatActivity {
                 authData.put("id", account.getDisplayName());
                 Log.d("please3",account.getDisplayName());
                 Log.d("please2",account.getIdToken());
-                ParseUser.logInWithInBackground("google", authData);
+                com.parse.boltsinternal.Task<ParseUser> x = ParseUser.logInWithInBackground("google", authData);
+                Thread tmp = new Thread(()->{
+                    while(!x.isCompleted()){
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    runOnUiThread(()->{
+                        showAlert("Successful Login", "Welcome back " + account.getDisplayName() + " !");
+                    });
+                });
+                tmp.start();
 
             }else{
                 account = completedTask.getResult(ApiException.class);
