@@ -8,11 +8,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
 /**
  *
  * This class is a wrapper for all the common UI elements that most activities will share.
@@ -27,11 +22,6 @@ public abstract class LangLearnActivity extends AppCompatActivity {
     protected Button messageButton;
     protected Button postButton;
     protected Button profileButton;
-
-    // info for logged in user
-    protected static String userId;
-    protected static String usernameSave;
-    protected static String langCode;
 
 //
 //    @Override protected void onCreate(Bundle savedInstanceState) {
@@ -86,35 +76,6 @@ public abstract class LangLearnActivity extends AppCompatActivity {
                     Intent i = new Intent(v.getContext(), ProfileActivity.class);
                     startActivity(i);
                     finish();
-                }
-            }
-        });
-    }
-
-    // This might need to be replaced in the future
-    // it gets (for now) the username and lang code and
-    protected void getUserInfo() {
-
-        // user is not logged in
-        if (userId == null) return;
-
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-
-        query.getInBackground(userId, new GetCallback<ParseUser>() {
-
-            @Override public void done(ParseUser o, ParseException e) {
-
-                if (e == null) {
-
-                    logInfo("Successfully got user info");
-                    usernameSave = o.getString("username");
-                    langCode = o.getString("nativelang");
-
-                } else {
-                    // Error
-                    logError("Failed to create user query!");
-                    e.printStackTrace();
-
                 }
             }
         });

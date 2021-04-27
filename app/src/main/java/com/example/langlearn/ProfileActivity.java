@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+
 import java.net.URL;
 
 public class ProfileActivity extends LangLearnActivity {
@@ -44,10 +46,8 @@ public class ProfileActivity extends LangLearnActivity {
 			}
 		}.start();
 
-		if (usernameSave != null && langCode != null) {
-
-			updateUi(usernameSave, "Native Language: " + langNameFromCode(langCode));
-		}
+		ParseUser u = ParseUser.getCurrentUser();
+		updateUi(u.getUsername(), "Native Language: " + langNameFromCode(u.getString("nativelang")));
 	}
 
 	private void updateUi(String username, String descr) {

@@ -51,8 +51,6 @@ public class MainActivity extends LangLearnActivity {
         // This is only being used in liu of a proper login function
         // This should be removed as soon as possible
 
-        getUserInfo();
-
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
         List<String> languages = new ArrayList<String>();
@@ -97,6 +95,9 @@ public class MainActivity extends LangLearnActivity {
                 new Thread() {
                     @Override
                     public void run() {
+                        ParseUser curr = ParseUser.getCurrentUser();
+                        String langCode = curr.getString("nativelang");
+
                         if (langCode == null) {
                             logError("User info has not been gathered! Source langauge not set!");
                             return;
