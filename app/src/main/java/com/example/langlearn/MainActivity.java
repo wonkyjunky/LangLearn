@@ -1,6 +1,7 @@
 package com.example.langlearn;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import com.example.langlearn.ui.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,11 @@ public class MainActivity extends LangLearnActivity {
         setContentView(R.layout.activity_main);
         // init universal app bar
         initInterface();
-
+        Button tmp = findViewById(R.id.logincorr);
+        tmp.setOnClickListener(v1->{
+            Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        });
         //
         // Sets test user id for all acitivities as it is a static variable
         // This is only being used in liu of a proper login function
