@@ -36,6 +36,7 @@ public class PostActivity extends LangLearnActivity {
 
     int post_count =0;
     String post_data = "";
+    String post_comment = "";
     ParseUser user;
 
     @Override
@@ -82,7 +83,28 @@ public class PostActivity extends LangLearnActivity {
 
     }
 
-    public void comment(String OG_post){
+    public void Post_Comment(String OG_ID){
+        ParseObject soccerPlayers = new ParseObject("Comments");
+        // Store an object
+        soccerPlayers.put("Origin",OG_ID);
+        soccerPlayers.put("replier", user.getUsername());
+        soccerPlayers.put("Comment", post_comment);
+
+        // Saving object
+        soccerPlayers.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("update:","table");
+                    // Success
+                } else {
+                    // Error
+                }
+            }
+        });
+    }
+
+    public void comment(String OG_post,String Origin_post){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         if(OG_post.length()>10){
             alert.setTitle("Replying to: "+OG_post.substring(0,15)+"...");
@@ -97,8 +119,8 @@ public class PostActivity extends LangLearnActivity {
 
         alert.setPositiveButton("Comment", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                post_data = input.getText().toString();
-                post();
+                post_comment = input.getText().toString();
+                Post_Comment(Origin_post);
                 // Do something with value!
             }
         });
@@ -131,6 +153,8 @@ public class PostActivity extends LangLearnActivity {
                 public void done(ParseObject player, ParseException e) {
                     if (e == null) {
                         String return_Post = player.getString("Post");
+                        String Orgin_post = player.getString("User")+player.getString("Post");
+                        Log.d("ID",Orgin_post);
                         LinearLayout Post_interaction_wrapper = new LinearLayout(screen);
                         //get message
                         TextView Post_info = new TextView(screen);
@@ -154,10 +178,16 @@ public class PostActivity extends LangLearnActivity {
                         Comment.setPadding(10,0,10,0);
                         Comment.setText("comment");
                         Comment.setOnClickListener(v1->{
-                            comment(return_Post);
+                            comment(return_Post,Orgin_post);
                         });
                         //Comment.setBackgroundColor(Color.DKGRAY);
                         Post_interaction.addView(Comment);
+
+                        Button ViewComment = new Button(screen);
+                        ViewComment.setPadding(10,0,10,0);
+                        ViewComment.setText("View Comments");
+                        //Message.setBackgroundColor(Color.GRAY);
+                        Post_interaction.addView(ViewComment);
 
                         Button Message = new Button(screen);
                         Message.setPadding(10,0,10,0);
