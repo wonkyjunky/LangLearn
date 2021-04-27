@@ -17,9 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.langlearn.ui.login.LoginActivity;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.parse.ParseUser;
 
 public class MainActivity extends LangLearnActivity {
 
@@ -28,49 +26,45 @@ public class MainActivity extends LangLearnActivity {
     Button btTranslate;
     String target;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // init universal app bar
-        initInterface();
-        Button tmp = findViewById(R.id.logincorr);
-        tmp.setOnClickListener(v1->{
-            Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
+
+        if (ParseUser.getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
-        });
-        //
-        // Sets test user id for all acitivities as it is a static variable
-        // This is only being used in liu of a proper login function
-        // This should be removed as soon as possible
-        userId = "CABSdzlZz2";
-        getUserInfo();
+            finish();
+        } else {
+            logInfo("Currently logged in: " + ParseUser.getCurrentUser().getUsername());
+        }
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
-        List<String> languages = new ArrayList<String>();
-        languages.add("Select a Language");
-        languages.add("English");
-        languages.add("Spanish");
-        languages.add("French");
-        languages.add("German");
-        languages.add("Korean");
-        languages.add("Japanese");
-        languages.add("Simple Chinese");
-        languages.add("Traditional Chinese");
-        languages.add("Vietnamese");
-        languages.add("Russian");
-        languages.add("Italian");
-        languages.add("Indonesian");
+        // init universal app bar
+        initNavBar();
+
+        String[] languages = {
+            "Select a Language",
+            "English",
+            "Spanish",
+            "French",
+            "German",
+            "Korean",
+            "Japanese",
+            "Simple Chinese",
+            "Traditional Chinese",
+            "Vietnamese",
+            "Russian",
+            "Italian",
+            "Indonesian"
+        };
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
         spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-
-
 
         btTranslate = findViewById(R.id.btTranslate);
         etTranslate = findViewById(R.id.etTranslate);
@@ -92,6 +86,9 @@ public class MainActivity extends LangLearnActivity {
                 new Thread() {
                     @Override
                     public void run() {
+                        ParseUser curr = ParseUser.getCurrentUser();
+                        String langCode = curr.getString("nativelang");
+
                         if (langCode == null) {
                             logError("User info has not been gathered! Source langauge not set!");
                             return;
