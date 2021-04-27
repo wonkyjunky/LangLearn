@@ -69,11 +69,10 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        //regular sign in
         user = new ParseUser();
-        // Set the user's username and password, which can be obtained by a forms
-        /*user.setUsername( "<Your username here>");
-        user.setPassword( "<Your password here>");
+       /* user.setUsername( "test");
+        user.setPassword( "1234");
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
@@ -98,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             *
         */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("202818144577-a6mms4hlaik35ld031enrkdn8qu87mas.apps.googleusercontent.com")
+                .requestIdToken("202818144577-cejbver949b7t185qd3hgki8lpj0sfpl.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -161,7 +160,16 @@ public class LoginActivity extends AppCompatActivity {
             // Signed in successfully, show authenticated UI.
             if(account!=null){
                 //authenticating with AWS
+                user.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            showAlert("Successful Sign Up!", "Welcome" + "<Your username here>" +"!");
+                        }else{
 
+                        }
+                    }
+                });
                 Map<String, String> authData = new HashMap<String, String>();
                 authData.put("access_token", account.getIdToken());
                 authData.put("id", account.getDisplayName());
