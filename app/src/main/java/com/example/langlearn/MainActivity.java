@@ -44,23 +44,7 @@ public class MainActivity extends LangLearnActivity {
         // init universal app bar
         initNavBar();
 
-        String[] languages = {
-            "Select a Language",
-            "English",
-            "Spanish",
-            "French",
-            "German",
-            "Korean",
-            "Japanese",
-            "Simple Chinese",
-            "Traditional Chinese",
-            "Vietnamese",
-            "Russian",
-            "Italian",
-            "Indonesian"
-        };
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, langNames);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
@@ -86,8 +70,7 @@ public class MainActivity extends LangLearnActivity {
                 new Thread() {
                     @Override
                     public void run() {
-                        ParseUser curr = ParseUser.getCurrentUser();
-                        String langCode = curr.getString("nativelang");
+                        String langCode = ParseUser.getCurrentUser().getString("nativelang");
 
                         if (langCode == null) {
                             logError("User info has not been gathered! Source langauge not set!");
@@ -156,32 +139,8 @@ public class MainActivity extends LangLearnActivity {
     public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if (parent.getItemAtPosition(position).toString().equals("German")) {
-                target = "de";
-            } else if (parent.getItemAtPosition(position).toString().equals("Spanish")){
-                target = "es";
-            } else if (parent.getItemAtPosition(position).toString().equals("French")){
-                target = "fr";
-            } else if (parent.getItemAtPosition(position).toString().equals("Korean")) {
-                target = "ko";
-            } else if (parent.getItemAtPosition(position).toString().equals("Japanese")){
-                target = "ja";
-            } else if (parent.getItemAtPosition(position).toString().equals("Simple Chinese")){
-                target = "zh-CN";
-            } else if (parent.getItemAtPosition(position).toString().equals("Traditional Chinese")){
-                target = "zh-TW";
-            } else if (parent.getItemAtPosition(position).toString().equals("Vietnamese")){
-                target = "vi";
-            } else if (parent.getItemAtPosition(position).toString().equals("Russian")){
-                target = "ru";
-            } else if (parent.getItemAtPosition(position).toString().equals("Italian")){
-                target = "it";
-            } else if (parent.getItemAtPosition(position).toString().equals("Indonesian")){
-                target = "id";
-            } else if (parent.getItemAtPosition(position).toString().equals("English")){
-                target = "en";
-            }
-            Toast.makeText(MainActivity.this, parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+            target = langCodes[position];
+            Toast.makeText(view.getContext(), parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
         }
 
         @Override

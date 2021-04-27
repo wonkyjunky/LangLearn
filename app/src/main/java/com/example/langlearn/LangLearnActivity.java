@@ -89,36 +89,49 @@ public abstract class LangLearnActivity extends AppCompatActivity {
         Log.i(this.getClass().getSimpleName(), info);
     }
 
+    protected static String[] langNames = new String[] {
+        "English",
+        "German",
+        "Korean",
+        "Spanish",
+        "French",
+        "Japanese",
+        "Simplified Chinese",
+        "Traditional Chinese",
+        "Vietnamese",
+        "Russian",
+        "Italian",
+        "Indonesian"
+    };
+
+    protected static String[] langCodes = new String[] {
+        "en",
+        "de",
+        "ko",
+        "es",
+        "fr",
+        "ja",
+        "zh-CN",
+        "zh-TW",
+        "vi",
+        "ru",
+        "it",
+        "id",
+    };
+
     public static String langNameFromCode(String langCode) {
 
-        switch (langCode) {
-
-            case "de":
-                return "German";
-            case "en":
-                return "English";
-            case "ko":
-                return "Korean";
-            case "es":
-                return "Spanish";
-            case "fr":
-                return "French";
-            case "ja":
-                return "Japanese";
-            case "zh-CN":
-                return "Simplified Chinese";
-            case "zh-TW":
-                return "Traditional Chinese";
-            case "vi":
-                return "Vietnamese";
-            case "ru":
-                return "Russian";
-            case "it":
-                return "Italian";
-            case "id":
-                return "Indonesian";
-            default:
-                return "None";
+        for (int i = 0; i < langCodes.length; ++i) {
+            if (langCodes[i].equals(langCode)) return langNames[i];
         }
+        return null;
+    }
+
+    public static String langCodeFromName(String langName) {
+
+        for (int i = 0; i < langNames.length; ++i) {
+            if (langNames[i].equals(langName)) return langCodes[i];
+        }
+        return null;
     }
 }
