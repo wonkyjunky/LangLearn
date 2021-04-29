@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.langlearn.Fragment.FragExampleActivity;
 import com.example.langlearn.ui.login.LoginActivity;
 import com.parse.ParseUser;
 
@@ -25,11 +26,22 @@ public class MainActivity extends LangLearnActivity {
     TextView tvResult;
     Button btTranslate;
     String target;
+    Button btFragment;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btFragment = findViewById(R.id.btFragment);
+
+        btFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FragExampleActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         if (ParseUser.getCurrentUser() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
