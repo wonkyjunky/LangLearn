@@ -21,10 +21,12 @@
             </intent-filter>
         </activity>
 		<activity android:name=".ProfileActivity" />
+        <activity android:name=".ContactsActivity" />
         <activity android:name=".MessageActivity" />
         <activity android:name=".PostActivity" />
         <activity android:name=".ui.login.LoginActivity" />
         <activity android:name=".ui.login.SignupActivity" />
+        <activity android:name=".Fragment.FragExampleActivity"/>
 
     </application>
 
