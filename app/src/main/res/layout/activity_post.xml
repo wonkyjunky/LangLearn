@@ -10,7 +10,7 @@
         android:id="@+id/POST"
         android:layout_width="81dp"
         android:layout_height="53dp"
-        android:layout_marginBottom="65dp"
+        android:layout_marginBottom="48dp"
         android:text="+"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="@+id/include2"
@@ -29,9 +29,8 @@
 
 
         <ScrollView
-            android:layout_width="412dp"
-            android:layout_height="646dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="413dp"
+            android:layout_height="671dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
