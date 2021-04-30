@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.langlearn.R;
+import com.example.langlearn.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class FragExampleActivity extends AppCompatActivity {
@@ -31,6 +32,9 @@ public class FragExampleActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.action_home:
                         fragment = new HomeFragment();
+                        break;
+                    case R.id.action_feed:
+                        fragment = new PostFragment();
                         break;
                     default:
                         fragment = new ExampleFragment();
