@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.langlearn.Fragment.FragExampleActivity;
 import com.example.langlearn.LangLearnActivity;
 import com.example.langlearn.MainActivity;
 import com.example.langlearn.R;
@@ -69,7 +70,7 @@ public class LoginActivity extends LangLearnActivity {
             }
             logInfo("Login successful");
 
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, FragExampleActivity.class);
             startActivity(intent);
             finish();
 
