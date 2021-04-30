@@ -36,7 +36,7 @@ public class FragExampleActivity extends AppCompatActivity {
                         fragment = new ProfileFragment();
                         break;
                     case R.id.action_chat:
-                        fragment = new MessageFragment();
+                        fragment = new ContactsFragment();
                         break;
                     default:
                         fragment = new HomeFragment();
