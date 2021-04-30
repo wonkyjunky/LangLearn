@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.langlearn.R;
@@ -28,11 +29,17 @@ public class FragExampleActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment fragment;
                 switch(item.getItemId()) {
-                    case R.id.action_home:
-                        fragment = new ExampleFragment();
+                    case R.id.action_feed:
+                        fragment = new PostFragment();
+                        break;
+                    case R.id.action_profile:
+                        fragment = new ProfileFragment();
+                        break;
+                    case R.id.action_chat:
+                        fragment = new MessageFragment();
                         break;
                     default:
-                        fragment = new defaultFragment();
+                        fragment = new HomeFragment();
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
@@ -40,5 +47,61 @@ public class FragExampleActivity extends AppCompatActivity {
             }
         });
 
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
+
+    }
+
+    protected void logError(String err) {
+        Log.e(this.getClass().getSimpleName(), err);
+    }
+
+    protected void logInfo(String info) {
+        Log.i(this.getClass().getSimpleName(), info);
+    }
+
+    protected static String[] langNames = new String[] {
+            "English",
+            "German",
+            "Korean",
+            "Spanish",
+            "French",
+            "Japanese",
+            "Simplified Chinese",
+            "Traditional Chinese",
+            "Vietnamese",
+            "Russian",
+            "Italian",
+            "Indonesian"
+    };
+
+    protected static String[] langCodes = new String[] {
+            "en",
+            "de",
+            "ko",
+            "es",
+            "fr",
+            "ja",
+            "zh-CN",
+            "zh-TW",
+            "vi",
+            "ru",
+            "it",
+            "id",
+    };
+
+    public static String langNameFromCode(String langCode) {
+
+        for (int i = 0; i < langCodes.length; ++i) {
+            if (langCodes[i].equals(langCode)) return langNames[i];
+        }
+        return null;
+    }
+
+    public static String langCodeFromName(String langName) {
+
+        for (int i = 0; i < langNames.length; ++i) {
+            if (langNames[i].equals(langName)) return langCodes[i];
+        }
+        return null;
     }
 }
