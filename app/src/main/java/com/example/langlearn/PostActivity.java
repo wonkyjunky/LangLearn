@@ -1,12 +1,14 @@
 package com.example.langlearn;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -24,12 +27,14 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PostActivity extends LangLearnActivity {
     Button CreatePOST;
     ConstraintLayout board;
     LinearLayout ll;
+    Dialog alert;
 
     int post_count =0;
     String post_data = "";
@@ -53,6 +58,8 @@ public class PostActivity extends LangLearnActivity {
         screen_width = displayMetrics.widthPixels;
         screen_height = displayMetrics.heightPixels;
 
+
+        alert = new Dialog(this);
         CreatePOST = findViewById(R.id.POST);
         user = ParseUser.getCurrentUser();
 
@@ -142,91 +149,83 @@ public class PostActivity extends LangLearnActivity {
         alert.show();
     }
 
-    public void get_post(){
+    public void get_post() {
         LinearLayout Post = new LinearLayout(this);
         Post.setOrientation(LinearLayout.VERTICAL);
-        Context screen = this.getApplicationContext();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Posts");
         query.addDescendingOrder("createdAt");
-        try {
-            query.setLimit(query.count());//this too
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         //global count of posts to make for offset
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                for (ParseObject player : objects) {
+                            if (e == null) {
+                                String return_Post = player.getString("Post");
+                                String Orgin_post = player.getString("User") + player.getString("Post");
+                                LinearLayout tmp = PostFrame(return_Post, Orgin_post);
+                                Post.addView(tmp);
 
-        for (int i =0; i <10;i++){
-            query.setSkip(i+post_count);//important
-            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                public void done(ParseObject player, ParseException e) {
-                    if (e == null) {
-                        String return_Post = player.getString("Post");
-                        String Orgin_post = player.getString("User")+player.getString("Post");
-                        LinearLayout tmp = PostFrame(return_Post,Orgin_post);
-                        Post.addView(tmp);
-
-                    } else {
-                        // Something is wrong
-                        return;
-                    }
+                            } else {
+                                // Something is wrong
+                                return;
+                            }
                 }
-            });
-        }
 
-        runOnUiThread(()->{
-            ll.addView(Post);
+                runOnUiThread(() -> {
+                    ll.addView(Post);
+                });
+            }
         });
     }
 
     public void View_Comment(String OG_post,String Origin_post){
         //get content
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle(OG_post);
 
-        ArrayList<String> comment_seciont = new ArrayList<>();
+        alert.dismiss();
+        runOnUiThread(()->{
+            alert.setTitle(OG_post);
+        });
+
+
         Context screen = this.getApplicationContext();
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
             query.addDescendingOrder("Likes");
             Log.d("Origin_post",Origin_post);
             query.whereContains("Origin",Origin_post);
-            AtomicBoolean show = new AtomicBoolean(true);
             ScrollView scroller = new ScrollView(screen);
             LinearLayout tmp = new LinearLayout(screen);
-            for (int i =0;i<10;i++){
-                query.setSkip(i);
-                query.getFirstInBackground(new GetCallback<ParseObject>() {
-                    public void done(ParseObject comments, ParseException e) {
-                        if(e==null){
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            tmp.setLayoutParams(params);
+
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+                    for(ParseObject comments : objects) {
+                        if (e == null) {
                             String return_Post = comments.getString("Comment");
-                            alert.setMessage(return_Post);
-                            alert.setNegativeButton("Done", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-
-                                }
-                            });
-                            tmp.addView(PostFrame(return_Post,""));
-
-                            Log.d("Post","ed");
-                           // return;
-                        }else{
-                            runOnUiThread(()->{
-                                if(show.get()){
-                                    scroller.addView(tmp);
-                                    alert.setView(scroller);
-                                    alert.show();
-                                    show.set(false);
-                                }
-
-                            });
-                            return;
-                            //e.printStackTrace();
+                            tmp.addView(PostFrame(return_Post, ""));
+                            Log.d("Post", tmp.getChildCount() + " " + return_Post);
+                            // return;
                         }
+                    }
+
+                        runOnUiThread(() -> {
+                            scroller.invalidate();
+                            scroller.requestLayout();
+                            scroller.addView(tmp);
+                            LinearLayout scroll_wrapper = new LinearLayout(screen);
+                            scroll_wrapper.setOrientation(LinearLayout.VERTICAL);
+                            scroll_wrapper.addView(scroller);
+                            alert.addContentView(
+                                    scroll_wrapper, new LinearLayout.LayoutParams(
+                                            new LinearLayout.LayoutParams(
+                                                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)));
+                            alert.show();
+                        });
 
                     }
-                });
-            }
 
-
+            });
         //finish content
 
         //loading spinner
