@@ -200,15 +200,17 @@ public class PostFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        int num_query = query.count();
+
         //global count of posts to make for offset
 
-        for (int i =0; i <query.count(); i++){
+        for (int i =0; i < num_query; i++){
             query.setSkip(i+post_count);//important
             query.getFirstInBackground(new GetCallback<ParseObject>() {
                 public void done(ParseObject player, ParseException e) {
                     if (e == null) {
                         String return_Post = player.getString("Post");
-                        String Orgin_post = player.getString("User")+player.getString("Post");
+                        String Orgin_post = player.getString("User")+" "+player.getString("Post");
                         Log.d("ID",Orgin_post);
                         LinearLayout Post_interaction_wrapper = new LinearLayout(screen);
                         //get message
