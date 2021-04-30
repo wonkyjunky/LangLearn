@@ -8,6 +8,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.langlearn.Fragment.FragExampleActivity;
 import com.example.langlearn.LangLearnActivity;
 import com.example.langlearn.MainActivity;
 import com.example.langlearn.R;
@@ -79,7 +80,7 @@ public class SignupActivity extends LangLearnActivity {
             logInfo("Sign up successful for user: " + username);
             Toast.makeText(this, "Signed up user: " + username, Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, FragExampleActivity.class);
             startActivity(intent);
             finish();
         });

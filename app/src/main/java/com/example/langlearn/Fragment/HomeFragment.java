@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.langlearn.Menu_Papago;
 import com.example.langlearn.R;
@@ -128,10 +130,19 @@ public class HomeFragment extends Fragment {
                         String word = etTranslate.getText().toString();
                         Menu_Papago papago = new Menu_Papago();
                         String resultWord;
+
+                        if (langCode.equals(target)){
+                            tvResult.setText(word);
+                            return;
+                        }
+
                         if (!langCode.equals("ko") && target != "ko"){
                             word = papago.getTranslation(word, langCode, "ko");
                             resultWord = papago.getTranslation(word, "ko", target);
-                        } else {
+                        } else if(langCode.equals("ko")) {
+                            resultWord = papago.getTranslation(word, "ko", target);
+                        }
+                        else {
                             resultWord = papago.getTranslation(word, langCode, "ko");
                         }
 
