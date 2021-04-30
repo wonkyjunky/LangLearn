@@ -1,25 +1,23 @@
 package com.example.langlearn;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -27,26 +25,41 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PostActivity extends LangLearnActivity {
     Button CreatePOST;
     ConstraintLayout board;
     LinearLayout ll;
+    Dialog alert;
 
     int post_count =0;
     String post_data = "";
     String post_comment = "";
     ParseUser user;
+    Context screen;
+    int screen_width =0;
+    int screen_height=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         initNavBar();
+        screen = this.getApplicationContext();
         board = findViewById(R.id.post_act_board);
         ll = findViewById(R.id.ll);
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screen_width = displayMetrics.widthPixels;
+        screen_height = displayMetrics.heightPixels;
+
+
+        alert = new Dialog(this);
         CreatePOST = findViewById(R.id.POST);
         user = ParseUser.getCurrentUser();
 
@@ -78,8 +91,10 @@ public class PostActivity extends LangLearnActivity {
 
             alert.show();
         });
-
-        get_post();
+        Thread setup = new Thread(()->{
+            get_post();
+        });
+        setup.start();
 
     }
 
@@ -106,7 +121,7 @@ public class PostActivity extends LangLearnActivity {
 
     public void comment(String OG_post,String Origin_post){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        if(OG_post.length()>10){
+        if(OG_post.length()>15){
             alert.setTitle("Replying to: "+OG_post.substring(0,15)+"...");
         }else{
             alert.setTitle("Replying to: "+OG_post);
@@ -134,82 +149,89 @@ public class PostActivity extends LangLearnActivity {
         alert.show();
     }
 
-    public void get_post(){
+    public void get_post() {
         LinearLayout Post = new LinearLayout(this);
         Post.setOrientation(LinearLayout.VERTICAL);
-        Context screen = this.getApplicationContext();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Posts");
         query.addDescendingOrder("createdAt");
-        try {
-            query.setLimit(query.count());//this too
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         //global count of posts to make for offset
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                for (ParseObject player : objects) {
+                            if (e == null) {
+                                String return_Post = player.getString("Post");
+                                String Orgin_post = player.getString("User") + player.getString("Post");
+                                LinearLayout tmp = PostFrame(return_Post, Orgin_post);
+                                Post.addView(tmp);
 
-        for (int i =0; i <10;i++){
-            query.setSkip(i+post_count);//important
-            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                public void done(ParseObject player, ParseException e) {
-                    if (e == null) {
-                        String return_Post = player.getString("Post");
-                        String Orgin_post = player.getString("User")+player.getString("Post");
-                        Log.d("ID",Orgin_post);
-                        LinearLayout Post_interaction_wrapper = new LinearLayout(screen);
-                        //get message
-                        TextView Post_info = new TextView(screen);
-                        Post_info.setTextSize(20);
-                        Post_info.setBackgroundColor(0x222222);
-                        Post_info.setText(return_Post);
-                        Post_interaction_wrapper.addView(Post_info);
-                        Post_interaction_wrapper.setOrientation(LinearLayout.VERTICAL);
-                        LinearLayout Post_interaction = new LinearLayout(screen);
-                        Post_interaction.setOrientation(LinearLayout.HORIZONTAL);
-
-                        //Like button
-                        Button Like = new Button(screen);
-                        //Like.setBackgroundColor(Color.GRAY);
-                        Like.setPadding(10,0,10,0);
-                        Like.setText("Like");
-                        Post_interaction.addView(Like);
-
-                        //Comment button
-                        Button Comment = new Button(screen);
-                        Comment.setPadding(10,0,10,0);
-                        Comment.setText("comment");
-                        Comment.setOnClickListener(v1->{
-                            comment(return_Post,Orgin_post);
-                        });
-                        //Comment.setBackgroundColor(Color.DKGRAY);
-                        Post_interaction.addView(Comment);
-
-                        Button ViewComment = new Button(screen);
-                        ViewComment.setPadding(10,0,10,0);
-                        ViewComment.setText("View Comments");
-                        //Message.setBackgroundColor(Color.GRAY);
-                        Post_interaction.addView(ViewComment);
-
-                        Button Message = new Button(screen);
-                        Message.setPadding(10,0,10,0);
-                        Message.setText("Message");
-                        //Message.setBackgroundColor(Color.GRAY);
-                        Post_interaction.addView(Message);
-
-                        Post_interaction_wrapper.addView(Post_interaction);
-                        Post.addView(Post_interaction_wrapper);
-                    } else {
-                        // Something is wrong
-                    }
+                            } else {
+                                // Something is wrong
+                                return;
+                            }
                 }
-            });
-        }
 
-
-
-
-        runOnUiThread(()->{
-            ll.addView(Post);
+                runOnUiThread(() -> {
+                    ll.addView(Post);
+                });
+            }
         });
+    }
+
+    public void View_Comment(String OG_post,String Origin_post){
+        //get content
+
+        alert.dismiss();
+        runOnUiThread(()->{
+            alert.setTitle(OG_post);
+        });
+
+
+        Context screen = this.getApplicationContext();
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
+            query.addDescendingOrder("Likes");
+            Log.d("Origin_post",Origin_post);
+            query.whereContains("Origin",Origin_post);
+            ScrollView scroller = new ScrollView(screen);
+            LinearLayout tmp = new LinearLayout(screen);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            tmp.setLayoutParams(params);
+
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+                    for(ParseObject comments : objects) {
+                        if (e == null) {
+                            String return_Post = comments.getString("Comment");
+                            tmp.addView(PostFrame(return_Post, ""));
+                            Log.d("Post", tmp.getChildCount() + " " + return_Post);
+                            // return;
+                        }
+                    }
+
+                        runOnUiThread(() -> {
+                            scroller.invalidate();
+                            scroller.requestLayout();
+                            scroller.addView(tmp);
+                            LinearLayout scroll_wrapper = new LinearLayout(screen);
+                            scroll_wrapper.setOrientation(LinearLayout.VERTICAL);
+                            scroll_wrapper.addView(scroller);
+                            alert.addContentView(
+                                    scroll_wrapper, new LinearLayout.LayoutParams(
+                                            new LinearLayout.LayoutParams(
+                                                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)));
+                            alert.show();
+                        });
+
+                    }
+
+            });
+        //finish content
+
+        //loading spinner
+
+        //end spinner
+
     }
 
     public void post(){
@@ -232,6 +254,78 @@ public class PostActivity extends LangLearnActivity {
         });
     }
 
+
+    public LinearLayout PostFrame(String return_Post, String Orgin_post){
+        LinearLayout Post = new LinearLayout(this);
+        LinearLayout Post_interaction_wrapper = new LinearLayout(screen);
+
+        Post_interaction_wrapper.setMinimumWidth(screen_width);
+        //get message
+        TextView Post_info = new TextView(screen);
+        Post_info.setWidth(screen_width-40);
+        Post_info.setHeight(screen_height/6);
+        Post_info.setTextSize(20);
+        Post_info.setBackgroundColor(Color.rgb(230,230,230));
+        Post_info.setPadding(10,100,10,0);
+        Post_info.setX(20);
+        Post_info.setText(return_Post);
+
+        Post_interaction_wrapper.addView(Post_info);
+        Post_interaction_wrapper.setOrientation(LinearLayout.VERTICAL);
+        Post_interaction_wrapper.setBackgroundColor(Color.rgb(230,230,230));
+
+
+        LinearLayout Post_interaction = new LinearLayout(screen);
+        Post_interaction.setBackgroundColor(Color.rgb(230,230,230));
+
+        Post_interaction.setOrientation(LinearLayout.HORIZONTAL);
+
+
+
+        //Like button
+        Button Like = new Button(screen);
+        //Like.setBackgroundColor(Color.GRAY);
+        Like.setPadding(10,0,10,0);
+        Like.setText("Like");
+        Post_interaction.addView(Like);
+
+        //Comment button
+        Button Comment = new Button(screen);
+        Comment.setPadding(10,0,10,0);
+        Comment.setText("comment");
+        Comment.setOnClickListener(v1->{
+            comment(return_Post,Orgin_post);
+        });
+        //Comment.setBackgroundColor(Color.DKGRAY);
+        Post_interaction.addView(Comment);
+
+        Button ViewComment = new Button(screen);
+        ViewComment.setPadding(10,0,10,0);
+        ViewComment.setText("View Comments");
+        ViewComment.setOnClickListener(v1->{
+            Thread task1 = new Thread(()->{
+                View_Comment(return_Post,Orgin_post);
+            });
+            task1.start();
+        });
+        //Message.setBackgroundColor(Color.GRAY);
+        Post_interaction.addView(ViewComment);
+
+        Button Message = new Button(screen);
+        Message.setPadding(10,0,10,0);
+        Message.setText("Message");
+        //Message.setBackgroundColor(Color.GRAY);
+        Post_interaction.addView(Message);
+
+        Post_interaction_wrapper.addView(Post_interaction);
+        TextView Boarder = new TextView(screen);
+        Boarder.setWidth(screen_width);
+        Boarder.setHeight(3);
+        Boarder.setBackgroundColor(Color.rgb(150,150,150));
+        Post_interaction_wrapper.addView(Boarder);
+        Post.addView(Post_interaction_wrapper);
+        return Post;
+    }
 
 }
 /*
