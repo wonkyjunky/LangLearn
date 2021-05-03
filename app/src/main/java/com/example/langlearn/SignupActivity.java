@@ -1,44 +1,42 @@
-package com.example.langlearn.ui.login;
+package com.example.langlearn;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.langlearn.Fragment.FragExampleActivity;
-import com.example.langlearn.LangLearnActivity;
-import com.example.langlearn.MainActivity;
-import com.example.langlearn.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.parse.ParseUser;
 
-public class SignupActivity extends LangLearnActivity {
+public class SignupActivity extends AppCompatActivity {
 
-    private TextView usernameText;
-    private TextView passwordText;
-    private Button signupButton;
     private Spinner langSpinner;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        usernameText = findViewById(R.id.signup_username_text);
-        passwordText = findViewById(R.id.signup_password_text);
-        signupButton = findViewById(R.id.signup_button);
         langSpinner = findViewById(R.id.signup_lang_spinner);
 
-        ArrayAdapter<String> langAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, langNames);
+        ArrayAdapter<String> langAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Util.langNames);
         langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         langSpinner.setAdapter(langAdapter);
 
-        signupButton.setOnClickListener(oc -> { signUp(); });
+        Button signupButton = findViewById(R.id.signup_button);
+        signupButton.setOnClickListener(oc -> signUp());
 
     }
 
     private void signUp() {
+
+        TextView usernameText = findViewById(R.id.signup_username_text);
+        TextView passwordText = findViewById(R.id.signup_password_text);
+
         // get username and password from ui
         String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
@@ -60,9 +58,9 @@ public class SignupActivity extends LangLearnActivity {
         // if either was invalid, do no more
         if (incomplete) return;
 
-        String langCode = langCodes[langSpinner.getSelectedItemPosition()];
+        String langCode = Util.langCodes[langSpinner.getSelectedItemPosition()];
 
-        logInfo("User has language: " + langCode);
+        Log.i("SignupActivity", "User has language: " + langCode);
 
         ParseUser user = new ParseUser();
         // setting credentials
@@ -73,14 +71,14 @@ public class SignupActivity extends LangLearnActivity {
         user.signUpInBackground(e -> {
             if (e != null) {
                 usernameText.setError(e.getMessage());
-                logError("Sign up failed: " + e.getMessage());
+                Log.e(getClass().getSimpleName(), "Sign up failed: " + e.getMessage());
                 return;
             }
 
-            logInfo("Sign up successful for user: " + username);
+            Log.i("SignupActivity", "Sign up successful for user: " + username);
             Toast.makeText(this, "Signed up user: " + username, Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(this, FragExampleActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         });
