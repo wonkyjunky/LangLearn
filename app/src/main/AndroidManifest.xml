@@ -13,20 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LangLearn">
-        <activity android:name=".MainActivity"/>
-		<activity android:name=".ProfileActivity" />
-        <activity android:name=".ContactsActivity" />
-        <activity android:name=".MessageActivity" />
-        <activity android:name=".PostActivity" />
-        <activity android:name=".ui.login.LoginActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".SignupActivity" />
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".ui.login.SignupActivity" />
-        <activity android:name=".Fragment.FragExampleActivity"/>
+
 
     </application>
 
