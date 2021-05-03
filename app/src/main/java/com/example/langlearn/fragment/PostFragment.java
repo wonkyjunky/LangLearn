@@ -6,8 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,7 +17,6 @@ import androidx.fragment.app.Fragment;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +30,6 @@ import android.widget.TextView;
 
 import com.example.langlearn.R;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -42,8 +38,6 @@ import com.parse.SaveCallback;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static android.content.Context.WINDOW_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +52,6 @@ public class PostFragment extends Fragment {
     Dialog alert;
     Activity activity;
 
-    int post_count =0;
     String post_data = "";
     String post_comment = "";
     ParseUser user;
@@ -96,6 +89,7 @@ public class PostFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +105,6 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_post, container, false);
     }
 
