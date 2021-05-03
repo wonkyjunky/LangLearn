@@ -17,8 +17,8 @@
             android:id="@+id/POST"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="370dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/ic_action_write" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
