@@ -1,22 +1,32 @@
-package com.example.langlearn;
+package com.example.langlearn.Fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
+import com.example.langlearn.R;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -25,16 +35,21 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public class PostActivity extends LangLearnActivity {
-    Button CreatePOST;
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link PostFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class PostFragment extends Fragment {
+
+    ImageButton CreatePOST;
     ConstraintLayout board;
     LinearLayout ll;
     Dialog alert;
+    Activity activity;
 
     int post_count =0;
     String post_data = "";
@@ -44,35 +59,76 @@ public class PostActivity extends LangLearnActivity {
     int screen_width =0;
     int screen_height=0;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
-        initNavBar();
-        screen = this.getApplicationContext();
-        board = findViewById(R.id.post_act_board);
-        ll = findViewById(R.id.ll);
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public PostFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment PostFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static PostFragment newInstance(String param1, String param2) {
+        PostFragment fragment = new PostFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity = getActivity();
+        screen = activity.getApplicationContext();
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screen_width = displayMetrics.widthPixels;
         screen_height = displayMetrics.heightPixels;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+
+        return inflater.inflate(R.layout.fragment_post, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        board = view.findViewById(R.id.post_act_board);
+        ll = view.findViewById(R.id.ll);
 
 
-        alert = new Dialog(this);
-        CreatePOST = findViewById(R.id.POST);
+        CreatePOST = view.findViewById(R.id.POST);
         user = ParseUser.getCurrentUser();
 
         CreatePOST.setOnClickListener(v1->{
             /*
-            * hide navbar
-            * */
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+             * hide navbar
+             * */
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
             alert.setTitle("Create Post");
 
-                // Set an EditText view to get user input
-            final EditText input = new EditText(this);
+            // Set an EditText view to get user input
+            final EditText input = new EditText(getActivity());
             alert.setView(input);
 
             alert.setPositiveButton("POST", new DialogInterface.OnClickListener() {
@@ -91,10 +147,7 @@ public class PostActivity extends LangLearnActivity {
 
             alert.show();
         });
-        Thread setup = new Thread(()->{
-            get_post();
-        });
-        setup.start();
+        get_post();
 
     }
 
@@ -120,7 +173,7 @@ public class PostActivity extends LangLearnActivity {
     }
 
     public void comment(String OG_post,String Origin_post){
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(screen);
         if(OG_post.length()>15){
             alert.setTitle("Replying to: "+OG_post.substring(0,15)+"...");
         }else{
@@ -129,7 +182,7 @@ public class PostActivity extends LangLearnActivity {
 
 
         // Set an EditText view to get user input
-        final EditText input = new EditText(this);
+        final EditText input = new EditText(screen);
         alert.setView(input);
 
         alert.setPositiveButton("Comment", new DialogInterface.OnClickListener() {
@@ -150,7 +203,7 @@ public class PostActivity extends LangLearnActivity {
     }
 
     public void get_post() {
-        LinearLayout Post = new LinearLayout(this);
+        LinearLayout Post = new LinearLayout(screen);
         Post.setOrientation(LinearLayout.VERTICAL);
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Posts");
         query.addDescendingOrder("createdAt");
@@ -159,19 +212,18 @@ public class PostActivity extends LangLearnActivity {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 for (ParseObject player : objects) {
-                            if (e == null) {
-                                String return_Post = player.getString("Post");
-                                String Orgin_post = player.getString("User") + player.getString("Post");
-                                LinearLayout tmp = PostFrame(return_Post, Orgin_post);
-                                Post.addView(tmp);
-
-                            } else {
-                                // Something is wrong
-                                return;
-                            }
+                    if (e == null) {
+                        String return_Post = player.getString("Post");
+                        String Orgin_post = player.getString("User") + player.getString("Post");
+                        LinearLayout tmp = PostFrame(return_Post, Orgin_post);
+                        Post.addView(tmp);
+                    } else {
+                        // Something is wrong
+                        return;
+                    }
                 }
 
-                runOnUiThread(() -> {
+                activity.runOnUiThread(() -> {
                     ll.addView(Post);
                 });
             }
@@ -182,50 +234,48 @@ public class PostActivity extends LangLearnActivity {
         //get content
 
         alert.dismiss();
-        runOnUiThread(()->{
+        activity.runOnUiThread(()->{
             alert.setTitle(OG_post);
         });
 
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
+        query.addDescendingOrder("Likes");
+        Log.d("Origin_post",Origin_post);
+        query.whereContains("Origin",Origin_post);
+        ScrollView scroller = new ScrollView(screen);
+        LinearLayout tmp = new LinearLayout(screen);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tmp.setLayoutParams(params);
 
-        Context screen = this.getApplicationContext();
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
-            query.addDescendingOrder("Likes");
-            Log.d("Origin_post",Origin_post);
-            query.whereContains("Origin",Origin_post);
-            ScrollView scroller = new ScrollView(screen);
-            LinearLayout tmp = new LinearLayout(screen);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            tmp.setLayoutParams(params);
-
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> objects, ParseException e) {
-                    for(ParseObject comments : objects) {
-                        if (e == null) {
-                            String return_Post = comments.getString("Comment");
-                            tmp.addView(PostFrame(return_Post, ""));
-                            Log.d("Post", tmp.getChildCount() + " " + return_Post);
-                            // return;
-                        }
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                for(ParseObject comments : objects) {
+                    if (e == null) {
+                        String return_Post = comments.getString("Comment");
+                        tmp.addView(PostFrame(return_Post, ""));
+                        Log.d("Post", tmp.getChildCount() + " " + return_Post);
+                        // return;
                     }
+                }
 
-                        runOnUiThread(() -> {
-                            scroller.invalidate();
-                            scroller.requestLayout();
-                            scroller.addView(tmp);
-                            LinearLayout scroll_wrapper = new LinearLayout(screen);
-                            scroll_wrapper.setOrientation(LinearLayout.VERTICAL);
-                            scroll_wrapper.addView(scroller);
-                            alert.addContentView(
-                                    scroll_wrapper, new LinearLayout.LayoutParams(
-                                            new LinearLayout.LayoutParams(
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)));
-                            alert.show();
-                        });
+                activity.runOnUiThread(() -> {
+                    scroller.invalidate();
+                    scroller.requestLayout();
+                    scroller.addView(tmp);
+                    LinearLayout scroll_wrapper = new LinearLayout(screen);
+                    scroll_wrapper.setOrientation(LinearLayout.VERTICAL);
+                    scroll_wrapper.addView(scroller);
+                    alert.addContentView(
+                            scroll_wrapper, new LinearLayout.LayoutParams(
+                                    new LinearLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)));
+                    alert.show();
+                });
 
-                    }
+            }
 
-            });
+        });
         //finish content
 
         //loading spinner
@@ -256,7 +306,7 @@ public class PostActivity extends LangLearnActivity {
 
 
     public LinearLayout PostFrame(String return_Post, String Orgin_post){
-        LinearLayout Post = new LinearLayout(this);
+        LinearLayout Post = new LinearLayout(screen);
         LinearLayout Post_interaction_wrapper = new LinearLayout(screen);
 
         Post_interaction_wrapper.setMinimumWidth(screen_width);
@@ -326,9 +376,4 @@ public class PostActivity extends LangLearnActivity {
         Post.addView(Post_interaction_wrapper);
         return Post;
     }
-
 }
-/*
-* future code
-*
-* */
