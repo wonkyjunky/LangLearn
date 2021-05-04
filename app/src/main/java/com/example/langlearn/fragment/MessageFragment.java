@@ -3,6 +3,7 @@ package com.example.langlearn.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import static com.example.langlearn.Util.translate;
+
 public class MessageFragment extends Fragment {
     ParseUser currentUser;
     ConstraintLayout layout;
@@ -31,8 +34,13 @@ public class MessageFragment extends Fragment {
     Context Screen;
     EditText text;
     Button send;
+
+    String nativeLang;
     String UserTo;
+    String UserToLang;
     String UserToName;
+
+
     final String TAG = "DEBUG: MESSAGE ACTIVITY:";
 
     @Override
@@ -60,7 +68,8 @@ public class MessageFragment extends Fragment {
         Bundle args = getArguments();
         UserTo = args.getString("OID");
         UserToName = args.getString("name");
-        Log.d(TAG, "onCreate: " + UserTo);
+        nativeLang = args.getString("lang");
+        Log.d(TAG, "fdsafdsa: " + nativeLang);
         try {
             getInitMessages();
         } catch (ParseException e) {
@@ -83,7 +92,6 @@ public class MessageFragment extends Fragment {
         });
     }
 
-
     public void getInitMessages() throws ParseException {
         LinearLayout Messages = new LinearLayout(Screen);
         Messages.setOrientation(LinearLayout.VERTICAL);
@@ -99,36 +107,54 @@ public class MessageFragment extends Fragment {
                                 UserTo.equals(messages1.getString("from")) && currentUser.getObjectId().equals(messages1.getString("to"))) {
                             if(UserTo.equals(messages1.get("to"))){
                                 String Message = messages1.getString("message");
-                                Log.d(TAG, "fillUsers: " + Message);
                                 LinearLayout Wrap = new LinearLayout(Screen);
-                                //Messages
                                 TextView Userinfo = new TextView(Screen);
-                                Userinfo.setText(currentUser.getUsername()+": "+ Message);
-                                Userinfo.setPadding(300, 0, 0, 0);
-                                Wrap.addView(Userinfo);
+                                //translate
+                                 translate(Message, nativeLang, currentUser.getString("nativelang"), new Handler.Callback() {
+                                    @Override
+                                    public boolean handleMessage(@NonNull android.os.Message msg) {
+                                        Bundle bundle = msg.getData();
+                                        String result =  bundle.getString("result");
+                                        Log.d(TAG, "handleMessage: fdsfdsa " + result);
+                                        //Messages
+                                        Userinfo.setText(currentUser.getUsername()+": "+ result);
+                                        Userinfo.setPadding(300, 0, 0, 0);
+                                        Wrap.addView(Userinfo);
 
-                                Wrap.setOrientation(LinearLayout.VERTICAL);
-                                LinearLayout Interaction = new LinearLayout(Screen);
-                                Interaction.setOrientation(LinearLayout.VERTICAL);
-                                //add wrapper to constrant
-                                Wrap.addView(Interaction);
-                                Messages.addView(Wrap);
+                                        Wrap.setOrientation(LinearLayout.VERTICAL);
+                                        LinearLayout Interaction = new LinearLayout(Screen);
+                                        Interaction.setOrientation(LinearLayout.VERTICAL);
+                                        //add wrapper to constrant
+                                        Wrap.addView(Interaction);
+                                        Messages.addView(Wrap);
+                                        return false;
+                                    }
+                                });
+
                             } else{
                                 String Message = messages1.getString("message");
-                                Log.d(TAG, "fillUsers: " + Message);
                                 LinearLayout Wrap = new LinearLayout(Screen);
-                                //Messages
                                 TextView Userinfo = new TextView(Screen);
-                                Userinfo.setText(UserToName+": "+Message);
-                                Userinfo.setPadding(300, 0, 0, 0);
-                                Wrap.addView(Userinfo);
+                                //translate
+                                translate(Message,nativeLang, currentUser.getString("nativelang") , new Handler.Callback() {
+                                    @Override
+                                    public boolean handleMessage(@NonNull android.os.Message msg) {
+                                        Bundle bundle = msg.getData();
+                                        String result =  bundle.getString("result");
+                                        Log.d(TAG, "handleMessage: line 144 " + result);
+                                        Userinfo.setText(UserToName+": "+ result);
+                                        Userinfo.setPadding(300, 0, 0, 0);
+                                        Wrap.addView(Userinfo);
 
-                                Wrap.setOrientation(LinearLayout.VERTICAL);
-                                LinearLayout Interaction = new LinearLayout(Screen);
-                                Interaction.setOrientation(LinearLayout.VERTICAL);
-                                //add wrapper to constrant
-                                Wrap.addView(Interaction);
-                                Messages.addView(Wrap);
+                                        Wrap.setOrientation(LinearLayout.VERTICAL);
+                                        LinearLayout Interaction = new LinearLayout(Screen);
+                                        Interaction.setOrientation(LinearLayout.VERTICAL);
+                                        //add wrapper to constrant
+                                        Wrap.addView(Interaction);
+                                        Messages.addView(Wrap);
+                                        return false;
+                                    }
+                                });
                             }
 
                         }

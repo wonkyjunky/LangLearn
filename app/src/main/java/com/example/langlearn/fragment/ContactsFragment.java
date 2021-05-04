@@ -55,12 +55,13 @@ public class ContactsFragment extends Fragment {
         Context Screen = getContext();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         for (int i = 0; i < 1; i++) {
-            query.orderByDescending("UserId");
+            query.orderByDescending("username");
             query.findInBackground((users, e) -> {
                 if (e == null) {
                     for (ParseUser user1 : users) {
                         String Username = user1.getString("username");
                         String objectId = user1.getObjectId();
+                        String nativelang = user1.getString("nativelang");
                         Log.d(TAG, "fillUsers: " + objectId);
                         LinearLayout Wrap = new LinearLayout(Screen);
                         TextView Userinfo = new TextView(Screen);
@@ -81,6 +82,7 @@ public class ContactsFragment extends Fragment {
                                 Bundle arguments = new Bundle();
                                 arguments.putString("OID", objectId);
                                 arguments.putString("name",Username);
+                                arguments.putString("lang",nativelang);
                                 mf.setArguments(arguments);
                                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                                 fragmentTransaction.replace(R.id.flContainer, mf);
