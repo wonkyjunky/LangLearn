@@ -61,6 +61,7 @@ public class ContactsFragment extends Fragment {
                     for (ParseUser user1 : users) {
                         String Username = user1.getString("username");
                         String objectId = user1.getObjectId();
+                        String nativelang = user1.getString("nativelang");
                         Log.d(TAG, "fillUsers: " + objectId);
                         LinearLayout Wrap = new LinearLayout(Screen);
                         TextView Userinfo = new TextView(Screen);
@@ -81,6 +82,7 @@ public class ContactsFragment extends Fragment {
                                 Bundle arguments = new Bundle();
                                 arguments.putString("OID", objectId);
                                 arguments.putString("name",Username);
+                                arguments.putString("lang",nativelang);
                                 mf.setArguments(arguments);
                                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                                 fragmentTransaction.replace(R.id.flContainer, mf);
