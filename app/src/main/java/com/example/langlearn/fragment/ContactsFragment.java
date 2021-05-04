@@ -21,14 +21,6 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ContactsFragment #newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ContactsFragment extends Fragment {
 
     final String TAG = "DEBUG";
