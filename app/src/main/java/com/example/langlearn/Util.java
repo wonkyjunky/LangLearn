@@ -7,6 +7,9 @@ import android.os.Message;
 public class Util {
 
     public static final String KOREAN = "ko";
+    public static final String ENGLISH = "en";
+    public static final String PROFILE_IMG = "profileimg";
+    public static final String NATIVE_LANG = "nativelang";
 
     public static final String[] langNames = new String[]{
             "English",
@@ -52,6 +55,13 @@ public class Util {
             if (langNames[i].equals(langName)) return langCodes[i];
         }
         return null;
+    }
+
+    public static int getLangCodeIndex(String langCode) {
+        for (int i = 0; i < langCodes.length; ++i) {
+            if (langCodes[i].equals(langCode)) return i;
+        }
+        return -1;
     }
 
     public static void translate(String text, String codeFrom, String codeTo, Handler.Callback callback) {

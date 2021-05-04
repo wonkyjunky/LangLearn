@@ -93,12 +93,14 @@ public class ContactsFragment extends Fragment {
                         Users.addView(Wrap);
 
                     }
+
                     getActivity().runOnUiThread(()->{
                         if(Users.getParent() != null) {
                             ((ViewGroup)Users.getParent()).removeView(Users); // <- fix
                         }
                         linearLay.addView(Users);
                     });
+
                 } else {
                     // Something went wrong.
                     Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();

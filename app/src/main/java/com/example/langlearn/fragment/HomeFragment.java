@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+        Spinner spinner = view.findViewById(R.id.spinner);
 
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Util.langNames);

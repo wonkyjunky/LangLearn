@@ -14,8 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LangLearn">
 
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".SignupActivity" />
+        <activity android:name=".CredentialActivity"/>
 
         <activity android:name=".MainActivity">
             <intent-filter>
