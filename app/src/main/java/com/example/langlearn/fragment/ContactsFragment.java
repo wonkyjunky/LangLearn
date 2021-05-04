@@ -13,17 +13,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.langlearn.R;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ContactsFragment#newInstance} factory method to
+ * Use the {@link ContactsFragment #newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ContactsFragment extends Fragment {
@@ -45,23 +48,28 @@ public class ContactsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         linearLay = view.findViewById(R.id.linLay);
         but = view.findViewById(R.id.buttonTesting);
-        fillUsers();
+        try {
+            fillUsers();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void fillUsers() {
+    public void fillUsers() throws ParseException {
 
         LinearLayout Users = new LinearLayout(getActivity());
         Users.setOrientation(LinearLayout.VERTICAL);
         Context Screen = getContext();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        for (int i = 0; i < 6; i++) {
-            query.whereEqualTo("UserId", i);
+        for (int i = 0; i < 1; i++) {
+            query.orderByDescending("UserId");
             query.findInBackground((users, e) -> {
                 if (e == null) {
                     for (ParseUser user1 : users) {
                         String Username = user1.getString("username");
-                        Log.d(TAG, "fillUsers: " + Username);
+                        String objectId = user1.getObjectId();
+                        Log.d(TAG, "fillUsers: " + objectId);
                         LinearLayout Wrap = new LinearLayout(Screen);
                         TextView Userinfo = new TextView(Screen);
                         Userinfo.setText(Username);
@@ -77,8 +85,13 @@ public class ContactsFragment extends Fragment {
                         Message.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                MessageFragment mf = new MessageFragment();
+                                Bundle arguments = new Bundle();
+                                arguments.putString("OID", objectId);
+                                arguments.putString("name",Username);
+                                mf.setArguments(arguments);
                                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.replace(R.id.flContainer, new MessageFragment());
+                                fragmentTransaction.replace(R.id.flContainer, mf);
                                 fragmentTransaction.commit();
                             }
                         });
