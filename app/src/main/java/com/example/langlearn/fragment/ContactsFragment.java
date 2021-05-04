@@ -63,7 +63,7 @@ public class ContactsFragment extends Fragment {
         Context Screen = getContext();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         for (int i = 0; i < 1; i++) {
-            query.orderByDescending("UserId");
+            query.orderByDescending("username");
             query.findInBackground((users, e) -> {
                 if (e == null) {
                     for (ParseUser user1 : users) {
