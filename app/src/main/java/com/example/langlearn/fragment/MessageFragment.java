@@ -1,23 +1,31 @@
 package com.example.langlearn.fragment;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import android.widget.Toast;
 
 import com.example.langlearn.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,10 +33,16 @@ import com.parse.ParseQuery;
  * create an instance of this fragment.
  */
 public class MessageFragment extends Fragment {
-
+    ParseUser currentUser;
+    ConstraintLayout layout;
+    Activity activity;
+    LinearLayout linearLay;
+    Context Screen;
     EditText text;
     Button send;
-    Button retrieve;
+    String UserTo;
+    String UserToName;
+    final String TAG = "DEBUG: MESSAGE ACTIVITY:";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +78,8 @@ public class MessageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = getActivity();
+        Screen = activity.getApplicationContext();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -80,51 +96,97 @@ public class MessageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int userCount = 1;
-        String[] Users = new String[userCount];
-        text = view.findViewById(R.id.editTextTextMultiLine);
-        send = view.findViewById(R.id.sendButton);
-        retrieve = view.findViewById(R.id.buttonRetrieve);
-
+        layout = view.findViewById(R.id.LayoutM);
+        linearLay = view.findViewById(R.id.MessageLayout);
+        send = view.findViewById(R.id.sendMessageButt);
+        text = view.findViewById(R.id.messageText);
+        currentUser = ParseUser.getCurrentUser();
+        Bundle args = getArguments();
+        UserTo = args.getString("OID");
+        UserToName = args.getString("name");
+        Log.d(TAG, "onCreate: " + UserTo);
+        try {
+            getInitMessages();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                text = view.findViewById(R.id.editTextTextMultiLine);
-                TextView textView = view.findViewById(R.id.textView2);
-                ParseObject firstObject = new ParseObject("FirstClass");
-                firstObject.put("Message", text.getText().toString());
-                firstObject.saveInBackground(e -> {
-                    if (e != null) {
-                        textView.setText(String.format("Fail to add data..." + e.getLocalizedMessage(), firstObject.get("Message")));
-                    }
-                    else {
-                        textView.setText(String.format("Data saved is: \n %s", firstObject.get("Message")));
+                String msg = text.getText().toString();
+                ParseObject message = new ParseObject("Messages");
+                message.put("message", msg);
+                message.put("to",UserTo);
+                message.put("from",currentUser.getObjectId());
+                message.saveInBackground(e -> {
+                    if(e==null){
+                        Log.d(TAG, "onClick: POGCHAMP MESSAGE SUBMITTED JUST DO LIVE UPDATE AND WE GUCCI");
                     }
                 });
             }
         });
-        retrieve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getMessage();
-            }
-        });
-
     }
 
 
-    void getMessage(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("FirstClass");
-        query.whereEqualTo("objectId", "Uv2xUdlOdi");
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            public void done(ParseObject message, ParseException e) {
+    public void getInitMessages() throws ParseException {
+        LinearLayout Messages = new LinearLayout(Screen);
+        Messages.setOrientation(LinearLayout.VERTICAL);
+        Log.d(TAG, "getInitMessages: " + ParseUser.getCurrentUser().getObjectId());
+        ParseQuery<ParseUser> query = ParseQuery.getQuery("Messages");
+        Log.d(TAG, "getInitMessages: " + query.count());
+        for (int i = 0; i < 1; i++) {
+            query.orderByDescending("to");
+            query.findInBackground((messages, e) -> {
                 if (e == null) {
-                    String Message = message.getString("Message");
-                    Log.e("GFSDGSFDGFDSGFSD", "done: " + Message );
+                    for (ParseObject messages1 : messages) {
+                        if(UserTo.equals(messages1.getString("to")) && currentUser.getObjectId().equals(messages1.getString("from")) ||
+                                UserTo.equals(messages1.getString("from")) && currentUser.getObjectId().equals(messages1.getString("to"))) {
+                            if(UserTo.equals(messages1.get("to"))){
+                                String Message = messages1.getString("message");
+                                Log.d(TAG, "fillUsers: " + Message);
+                                LinearLayout Wrap = new LinearLayout(Screen);
+                                //Messages
+                                TextView Userinfo = new TextView(Screen);
+                                Userinfo.setText(currentUser.getUsername()+": "+ Message);
+                                Userinfo.setPadding(300, 0, 0, 0);
+                                Wrap.addView(Userinfo);
+
+                                Wrap.setOrientation(LinearLayout.VERTICAL);
+                                LinearLayout Interaction = new LinearLayout(Screen);
+                                Interaction.setOrientation(LinearLayout.VERTICAL);
+                                //add wrapper to constrant
+                                Wrap.addView(Interaction);
+                                Messages.addView(Wrap);
+                            } else{
+                                String Message = messages1.getString("message");
+                                Log.d(TAG, "fillUsers: " + Message);
+                                LinearLayout Wrap = new LinearLayout(Screen);
+                                //Messages
+                                TextView Userinfo = new TextView(Screen);
+                                Userinfo.setText(UserToName+": "+Message);
+                                Userinfo.setPadding(300, 0, 0, 0);
+                                Wrap.addView(Userinfo);
+
+                                Wrap.setOrientation(LinearLayout.VERTICAL);
+                                LinearLayout Interaction = new LinearLayout(Screen);
+                                Interaction.setOrientation(LinearLayout.VERTICAL);
+                                //add wrapper to constrant
+                                Wrap.addView(Interaction);
+                                Messages.addView(Wrap);
+                            }
+
+                        }
+                    }
+                    activity.runOnUiThread(() -> {
+                        if (Messages.getParent() != null) {
+                            ((ViewGroup) Messages.getParent()).removeView(Messages); // <- fix
+                        }
+                        //add to Main Constraint which displays on fragment;
+                        linearLay.addView(Messages);
+                    });
                 } else {
-                    // Something is wrong
                 }
-            }
-        });
+            });
+        }
     }
 }
