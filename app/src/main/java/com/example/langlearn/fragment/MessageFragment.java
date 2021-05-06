@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +18,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.parse.Parse;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
+
 
 import com.example.langlearn.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.example.langlearn.Util.translate;
 
@@ -70,11 +80,39 @@ public class MessageFragment extends Fragment {
         UserToName = args.getString("name");
         nativeLang = args.getString("lang");
         Log.d(TAG, "fdsafdsa: " + nativeLang);
+        ParseLiveQueryClient parseLiveQueryClient = null;
         try {
             getInitMessages();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+//        try {
+//            parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient(new URI("http://langlearn.b4a.io/"));
+//            if (parseLiveQueryClient != null) {
+//                ParseQuery<ParseObject> parseQuery = new ParseQuery("Messages");
+//                parseQuery.orderByAscending("createdAt");
+//                SubscriptionHandling<ParseObject> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+//
+//                subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new SubscriptionHandling.HandleEventCallback<ParseObject>() {
+//                    @Override
+//                    public void onEvent(ParseQuery<ParseObject> query, final ParseObject object) {
+//                        Handler handler = new Handler(Looper.getMainLooper());
+//                        handler.post(new Runnable() {
+//                            public void run() {
+//                                try {
+//                                    getInitMessages();
+//                                } catch (ParseException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        });
+//                    }
+//                });
+//            }
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();
+//        }
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +123,15 @@ public class MessageFragment extends Fragment {
                 message.put("from",currentUser.getObjectId());
                 message.saveInBackground(e -> {
                     if(e==null){
-                        Log.d(TAG, "onClick: POGCHAMP MESSAGE SUBMITTED JUST DO LIVE UPDATE AND WE GUCCI");
+                        MessageFragment cf = new MessageFragment();
+                        Bundle arguments = new Bundle();
+                        arguments.putString("OID", UserTo);
+                        arguments.putString("name",UserToName);
+                        arguments.putString("lang",nativeLang);
+                        cf.setArguments(arguments);
+                        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.flContainer, cf);
+                        fragmentTransaction.commit();
                     }
                 });
             }
@@ -99,7 +145,7 @@ public class MessageFragment extends Fragment {
         ParseQuery<ParseUser> query = ParseQuery.getQuery("Messages");
         Log.d(TAG, "getInitMessages: " + query.count());
         for (int i = 0; i < 1; i++) {
-            query.orderByDescending("to");
+            query.orderByAscending("createdAt");
             query.findInBackground((messages, e) -> {
                 if (e == null) {
                     for (ParseObject messages1 : messages) {
@@ -110,7 +156,7 @@ public class MessageFragment extends Fragment {
                                 LinearLayout Wrap = new LinearLayout(Screen);
                                 TextView Userinfo = new TextView(Screen);
                                 //translate
-                                 translate(Message, nativeLang, currentUser.getString("nativelang"), new Handler.Callback() {
+                                 translate(Message, nativeLang, nativeLang, new Handler.Callback() {
                                     @Override
                                     public boolean handleMessage(@NonNull android.os.Message msg) {
                                         Bundle bundle = msg.getData();
