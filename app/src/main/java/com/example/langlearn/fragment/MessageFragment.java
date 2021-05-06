@@ -20,6 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.langlearn.MainActivity;
 import com.parse.Parse;
 import com.parse.livequery.ParseLiveQueryClient;
 import com.parse.livequery.SubscriptionHandling;
@@ -118,8 +119,7 @@ public class MessageFragment extends Fragment {
                                     arguments.putString("name",UserToName);
                                     arguments.putString("lang",nativeLang);
                                     mf.setArguments(arguments);
-                                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                    fragmentTransaction.replace(R.id.flContainer, mf);
+                                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, mf).addToBackStack("name");
                                     fragmentTransaction.commit();
 
 
