@@ -161,8 +161,7 @@ public class MessageFragment extends Fragment {
         Log.d(TAG, "getInitMessages: " + ParseUser.getCurrentUser().getObjectId());
         ParseQuery<ParseUser> query = ParseQuery.getQuery("Messages");
         Log.d(TAG, "getInitMessages: " + query.count());
-        query.orderByAscending("time");
-
+        query.orderByAscending("createdAt");
         // Getting messages
         query.findInBackground((messages, e) -> {
 
@@ -175,8 +174,9 @@ public class MessageFragment extends Fragment {
             String currUserLang = ParseUser.getCurrentUser().getString("nativelang");
             String recipientId = UserTo;
 
-            ArrayList<Message> msgs = new ArrayList<>();
+            ArrayList<Message> relevantMessages = new ArrayList<>();
 
+            int i = 0;
             for (ParseObject m : messages) {
 
                 // getting the user ids
@@ -205,37 +205,53 @@ public class MessageFragment extends Fragment {
                     toLang = currUserLang;
                 }
 
-                // get message
+                // get message text
                 String text = m.getString("message");
 
-                msgs.add(new Message(fromLang, toLang, fromName, text, 0));
+                relevantMessages.add(new Message(fromLang, toLang, fromName, text, i));
+
+                // message view
+                LinearLayout messageLayout = new LinearLayout(Screen);
+                messageLayout.setOrientation(LinearLayout.VERTICAL);
+
+                // message text view
+                TextView messageText = new TextView(Screen);
+                messageText.setTag("msg" + i);
+                messageText.setPadding(300, 0, 0, 0);
+                messageLayout.addView(messageText);
+
+                // interaction?
+                LinearLayout interaction = new LinearLayout(Screen);
+                interaction.setOrientation(LinearLayout.VERTICAL);
+                messageLayout.addView(interaction);
+
+                // adding view to list
+                Messages.addView(messageLayout);
+
+                i += 1;
             }
-
-            // TODO: Sort messages
-
 
             // Display messages
 
-            for (Message m : msgs) {
+            for (Message m : relevantMessages) {
 
                 LinearLayout Wrap = new LinearLayout(Screen);
                 TextView Userinfo = new TextView(Screen);
 
                 //translate
                 translate(m.getText(), m.getFromLang(), m.getToLang(), (msg) -> {
+                    //translations[i] = new Translation()
                     Bundle bundle = msg.getData();
                     String result = bundle.getString("result");
-                    Log.d(TAG, "handleMessage: line 144 " + result);
-                    Userinfo.setText(m.getFromName() + ": " + result);
-                    Userinfo.setPadding(300, 0, 0, 0);
-                    Wrap.addView(Userinfo);
 
-                    Wrap.setOrientation(LinearLayout.VERTICAL);
-                    LinearLayout Interaction = new LinearLayout(Screen);
-                    Interaction.setOrientation(LinearLayout.VERTICAL);
-                    //add wrapper to constrant
-                    Wrap.addView(Interaction);
-                    Messages.addView(Wrap);
+                    TextView messageText = new TextView(Screen);
+
+                    TextView textView = Messages.findViewWithTag("msg" + m.getIndex());
+
+                    textView.setText(m.getFromName() + ": " + result);
+
+                    Log.d(TAG, "handleMessage: line 144 " + result);
+
                     return false;
                 });
             }
@@ -254,14 +270,14 @@ public class MessageFragment extends Fragment {
     private class Message {
 
         private String fromLang, toLang, fromName, text;
-        long time;
+        int index;
 
-        public Message(String fromLang, String toLang, String fromName, String text, long time) {
+        public Message(String fromLang, String toLang, String fromName, String text, int index) {
             this.fromLang = fromLang;
             this.toLang = toLang;
             this.fromName = fromName;
             this.text = text;
-            this.time = time;
+            this.index = index;
         }
 
         public String getFromLang() {
@@ -278,6 +294,10 @@ public class MessageFragment extends Fragment {
 
         public String getText() {
             return text;
+        }
+
+        public int getIndex() {
+            return index;
         }
     }
 
