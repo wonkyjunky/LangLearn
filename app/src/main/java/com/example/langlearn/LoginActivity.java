@@ -1,36 +1,28 @@
-package com.example.langlearn.ui.login;
+package com.example.langlearn;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.langlearn.Fragment.FragExampleActivity;
-import com.example.langlearn.LangLearnActivity;
-import com.example.langlearn.MainActivity;
-import com.example.langlearn.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.parse.ParseUser;
 
-public class LoginActivity extends LangLearnActivity {
+public class LoginActivity extends AppCompatActivity {
 
-    private TextView usernameText;
-    private TextView passwordText;
-    private Button loginButton;
-    private Button signupButton;
+    @Override public void onCreate(Bundle savedInstanceState) {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         // initializing ui elements
-        usernameText = findViewById(R.id.login_username_text);
-        passwordText = findViewById(R.id.login_password_text);
-        loginButton = findViewById(R.id.login_button);
-        signupButton = findViewById(R.id.login_signup_button);
+        Button loginButton = findViewById(R.id.login_button);
+        Button signupButton = findViewById(R.id.login_signup_button);
 
         // setting click listeners
-        loginButton.setOnClickListener(oc -> { logIn(); });
+        loginButton.setOnClickListener(oc -> logIn());
         signupButton.setOnClickListener(oc -> {
             startActivity(new Intent(this, SignupActivity.class));
             finish();
@@ -38,6 +30,9 @@ public class LoginActivity extends LangLearnActivity {
     }
 
     private void logIn() {
+
+        TextView usernameText = findViewById(R.id.login_username_text);
+        TextView passwordText = findViewById(R.id.login_password_text);
 
         // get username and password from ui
         String username = usernameText.getText().toString();
@@ -64,13 +59,13 @@ public class LoginActivity extends LangLearnActivity {
         ParseUser.logInInBackground(username, password, (user, e) -> {
 
             if (e != null) {
-                logError("Login failed: " + e.getMessage());
+                Log.e("LoginActivity", "Login failed: " + e.getMessage());
                 usernameText.setError(e.getMessage());
                 return;
             }
-            logInfo("Login successful");
+            Log.i("LoginActivity", "Login successful");
 
-            Intent intent = new Intent(this, FragExampleActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
 

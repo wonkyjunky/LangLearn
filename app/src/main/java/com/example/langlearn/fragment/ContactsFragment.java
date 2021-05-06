@@ -1,63 +1,66 @@
-package com.example.langlearn;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+package com.example.langlearn.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.example.langlearn.R;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.w3c.dom.Text;
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link ContactsFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class ContactsFragment extends Fragment {
 
-import java.util.ArrayList;
-
-public class ContactsActivity extends LangLearnActivity {
     final String TAG = "DEBUG";
-    ConstraintLayout layout;
-    LinearLayout linearLay;
 
+    LinearLayout linearLay;
     Button but;
-    ParseUser currentUser;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
-        initNavBar();
-        layout = findViewById(R.id.layout);
-        linearLay = findViewById(R.id.linLay);
-        but = findViewById(R.id.buttonTesting);
-        currentUser = ParseUser.getCurrentUser();
-        fillUsers();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_contacts, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        linearLay = view.findViewById(R.id.linLay);
+        but = view.findViewById(R.id.buttonTesting);
+        fillUsers();
 
     }
 
     public void fillUsers() {
-        LinearLayout Users = new LinearLayout(this);
+
+        LinearLayout Users = new LinearLayout(getActivity());
         Users.setOrientation(LinearLayout.VERTICAL);
-        Context Screen = this.getApplicationContext();
+        Context Screen = getContext();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         for (int i = 0; i < 6; i++) {
             query.whereEqualTo("UserId", i);
             query.findInBackground((users, e) -> {
                 if (e == null) {
                     for (ParseUser user1 : users) {
-                      String Username = user1.getString("username");
+                        String Username = user1.getString("username");
                         Log.d(TAG, "fillUsers: " + Username);
                         LinearLayout Wrap = new LinearLayout(Screen);
                         TextView Userinfo = new TextView(Screen);
@@ -74,10 +77,9 @@ public class ContactsActivity extends LangLearnActivity {
                         Message.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent i = new Intent(getApplicationContext(), MessageActivity.class);
-                                i.putExtra("UserTo", Userinfo.getText().toString());
-                                i.putExtra("UserFrom", currentUser);
-                                //startActivity(i);
+                                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.flContainer, new MessageFragment());
+                                fragmentTransaction.commit();
                             }
                         });
                         Interaction.addView(Message);
@@ -86,7 +88,7 @@ public class ContactsActivity extends LangLearnActivity {
                         Users.addView(Wrap);
 
                     }
-                    runOnUiThread(()->{
+                    getActivity().runOnUiThread(()->{
                         if(Users.getParent() != null) {
                             ((ViewGroup)Users.getParent()).removeView(Users); // <- fix
                         }
@@ -94,7 +96,7 @@ public class ContactsActivity extends LangLearnActivity {
                     });
                 } else {
                     // Something went wrong.
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
