@@ -37,6 +37,11 @@ public class CredentialActivity extends AppCompatActivity {
 
     Pair<String, String> getCredentials() {
 
+        if (usernameText.getText() == null){
+            Toast.makeText(this, "Username is not entered", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
         // get username and password from ui
         String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
@@ -86,6 +91,7 @@ public class CredentialActivity extends AppCompatActivity {
     private void signUp() {
 
         Pair<String, String> cred = getCredentials();
+        if (cred == null) return;
 
         ParseUser user = new ParseUser();
         // setting credentials
