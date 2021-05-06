@@ -72,7 +72,11 @@ public class ContactsFragment extends Fragment {
                 if (e != null){
                     Log.e(TAG, "Issue with getting users", e);
                 }
-                mUsers.addAll(objects);
+                for (ParseUser user : objects){
+                    if (!user.getUsername().equals(u.getUsername())){
+                        mUsers.add(user);
+                    }
+                }
                 contactAdapter.notifyDataSetChanged();
             }
         });
