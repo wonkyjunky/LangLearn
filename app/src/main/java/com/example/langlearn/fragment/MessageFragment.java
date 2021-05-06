@@ -31,6 +31,7 @@ import com.parse.livequery.SubscriptionHandling;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.ArrayList;
 
 import static com.example.langlearn.Util.translate;
@@ -139,6 +140,7 @@ public class MessageFragment extends Fragment {
                 message.put("message", msg);
                 message.put("to", UserTo);
                 message.put("from", currentUser.getObjectId());
+                message.put("time", Instant.now().getEpochSecond());
                 message.saveInBackground(e -> {
                     if (e == null) {
                         Log.d(TAG, "onClick: ");
@@ -159,7 +161,7 @@ public class MessageFragment extends Fragment {
         Log.d(TAG, "getInitMessages: " + ParseUser.getCurrentUser().getObjectId());
         ParseQuery<ParseUser> query = ParseQuery.getQuery("Messages");
         Log.d(TAG, "getInitMessages: " + query.count());
-        query.orderByAscending("createdAt");
+        query.orderByAscending("time");
 
         // Getting messages
         query.findInBackground((messages, e) -> {
@@ -173,7 +175,7 @@ public class MessageFragment extends Fragment {
             String currUserLang = ParseUser.getCurrentUser().getString("nativelang");
             String recipientId = UserTo;
 
-            ArrayList<ParseObject> msgs;
+            ArrayList<Message> msgs = new ArrayList<>();
 
             for (ParseObject m : messages) {
 
@@ -188,30 +190,43 @@ public class MessageFragment extends Fragment {
                 if (!matchUser(recipientId, mFromId, mToId)) continue;
 
                 // aliases for languages
-                String fromLang, toLang;
+                String fromLang, toLang, fromName;
 
                 // if user is the sender
                 if (mFromId.equals(currUserId)) {
                     fromLang = currUserLang;
+                    fromName = ParseUser.getCurrentUser().getUsername();
                     toLang = currUserLang;
                 }
                 // if the recipient is the sender
                 else {
                     fromLang = nativeLang;
+                    fromName = UserToName;
                     toLang = currUserLang;
                 }
 
                 // get message
-                String Message = m.getString("message");
+                String text = m.getString("message");
+
+                msgs.add(new Message(fromLang, toLang, fromName, text, 0));
+            }
+
+            // TODO: Sort messages
+
+
+            // Display messages
+
+            for (Message m : msgs) {
+
                 LinearLayout Wrap = new LinearLayout(Screen);
                 TextView Userinfo = new TextView(Screen);
 
                 //translate
-                translate(Message, fromLang, toLang, (msg) -> {
+                translate(m.getText(), m.getFromLang(), m.getToLang(), (msg) -> {
                     Bundle bundle = msg.getData();
                     String result = bundle.getString("result");
                     Log.d(TAG, "handleMessage: line 144 " + result);
-                    Userinfo.setText(UserToName + ": " + result);
+                    Userinfo.setText(m.getFromName() + ": " + result);
                     Userinfo.setPadding(300, 0, 0, 0);
                     Wrap.addView(Userinfo);
 
@@ -235,4 +250,35 @@ public class MessageFragment extends Fragment {
 
         });
     }
+
+    private class Message {
+
+        private String fromLang, toLang, fromName, text;
+        long time;
+
+        public Message(String fromLang, String toLang, String fromName, String text, long time) {
+            this.fromLang = fromLang;
+            this.toLang = toLang;
+            this.fromName = fromName;
+            this.text = text;
+            this.time = time;
+        }
+
+        public String getFromLang() {
+            return fromLang;
+        }
+
+        public String getToLang() {
+            return toLang;
+        }
+
+        public String getFromName() {
+            return fromName;
+        }
+
+        public String getText() {
+            return text;
+        }
+    }
+
 }
