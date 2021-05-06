@@ -12,15 +12,40 @@
         android:layout_height="match_parent">
 
 
+        <Button
+            android:id="@+id/profile_logout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="24dp"
+            android:width="200dp"
+            android:height="48dp"
+            android:text="@string/logout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_update_button" />
+
+        <TextView
+            android:id="@+id/profile_img_text"
+            android:layout_width="128dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="48dp"
+            android:gravity="center"
+            android:text="@string/profileimg"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_lang_text" />
+
         <TextView
             android:id="@+id/profile_greeting_text"
             android:layout_width="203dp"
             android:layout_height="76dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="68dp"
             android:gravity="center"
             android:textSize="28sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.593"
+            app:layout_constraintHorizontal_bias="0.312"
             app:layout_constraintStart_toEndOf="@+id/profile_img"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,27 +59,53 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/profile_descr_text"
-            android:layout_width="245dp"
-            android:layout_height="218dp"
-            android:layout_marginTop="84dp"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_img" />
-
 
         <Button
-            android:id="@+id/profile_logout_button"
+            android:id="@+id/profile_update_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="logout"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="24dp"
+            android:width="200dp"
+            android:height="48dp"
+            android:text="@string/update"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintTop_toBottomOf="@+id/profile_img_edit" />
+
+        <TextView
+            android:id="@+id/profile_lang_text"
+            android:layout_width="128dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="120dp"
+            android:gravity="center"
+            android:text="@string/language"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_img" />
+
+        <Spinner
+            android:id="@+id/profile_lang_spinner"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="120dp"
+            app:layout_constraintStart_toEndOf="@+id/profile_lang_text"
+            app:layout_constraintTop_toBottomOf="@+id/profile_img" />
+
+        <EditText
+            android:id="@+id/profile_img_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="48dp"
+            android:width="200dp"
+            android:height="48dp"
+            android:ems="10"
+            android:hint="@string/url"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@+id/profile_img_text"
+            app:layout_constraintTop_toBottomOf="@+id/profile_lang_spinner" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

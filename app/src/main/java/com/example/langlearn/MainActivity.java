@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,39 +25,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        boolean newAccount = getIntent().getBooleanExtra("newacc", false);
+
         ParseUser u = ParseUser.getCurrentUser();
 
         if (u == null) {
 
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, CredentialActivity.class));
             finish();
         }
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-            @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment fragment;
-                switch(item.getItemId()) {
-                    case R.id.action_feed:
-                        fragment = new PostFragment();
-                        break;
-                    case R.id.action_profile:
-                        fragment = new ProfileFragment();
-                        break;
-                    case R.id.action_chat:
-                        fragment = new ContactsFragment();
-                        break;
-                    default:
-                        fragment = new HomeFragment();
-                        break;
-                }
-                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
-                return true;
+        bottomNavigationView.setOnNavigationItemSelectedListener((MenuItem item) -> {
+            Fragment fragment;
+            switch(item.getItemId()) {
+                case R.id.action_feed:
+                    fragment = new PostFragment();
+                    break;
+                case R.id.action_profile:
+                    fragment = new ProfileFragment();
+                    break;
+                case R.id.action_chat:
+                    fragment = new ContactsFragment();
+                    break;
+                default:
+                    fragment = new HomeFragment();
+                    break;
             }
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+            return true;
         });
 
-        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        if (newAccount) {
+            bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        } else {
+            bottomNavigationView.setSelectedItemId(R.id.action_home);
+        }
+
     }
 }
 

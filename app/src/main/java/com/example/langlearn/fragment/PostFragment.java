@@ -117,7 +117,7 @@ public class PostFragment extends Fragment {
         ll = view.findViewById(R.id.ll);
 
 
-        CreatePOST = view.findViewById(R.id.POST);
+        CreatePOST = view.findViewById(R.id.btnMessage);
         user = ParseUser.getCurrentUser();
 
         CreatePOST.setOnClickListener(v1->{

@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/POST"
+            android:id="@+id/btnMessage"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="370dp"
