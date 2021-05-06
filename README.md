@@ -17,13 +17,13 @@ So that Users can communicate without any language barriers.<br/>
 
 ## MVP
 
-- [ ] User can **create his/her account**
-- [ ] User can **login with his/her account**
-- [ ] User can **delete his/her account**
-- [ ] User can **post/chat with other users**
-- [ ] User can **see posts and messages**
-- [ ] User can **select a language to translate**
-- [ ] User can **navigate to other activities**
+- [x] User can **create his/her account**
+- [x] User can **login with his/her account**
+- [x] User can **delete his/her account**
+- [x] User can **post/chat with other users**
+- [x] User can **see posts and messages**
+- [x] User can **select a language to translate**
+- [x] User can **navigate to other activities**
 
 ## Timelines
 
