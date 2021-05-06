@@ -20,20 +20,18 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.langlearn.MainActivity;
-import com.parse.Parse;
-import com.parse.livequery.ParseLiveQueryClient;
-import com.parse.livequery.SubscriptionHandling;
-
-
 import com.example.langlearn.R;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import static com.example.langlearn.Util.translate;
 
@@ -150,109 +148,91 @@ public class MessageFragment extends Fragment {
         });
     }
 
+    boolean matchUser(String userId, String fromId, String toId) {
+        if (!userId.equals(fromId) && !userId.equals(toId)) return false;
+        return true;
+    }
+
     public void getInitMessages() throws ParseException {
         LinearLayout Messages = new LinearLayout(Screen);
         Messages.setOrientation(LinearLayout.VERTICAL);
         Log.d(TAG, "getInitMessages: " + ParseUser.getCurrentUser().getObjectId());
         ParseQuery<ParseUser> query = ParseQuery.getQuery("Messages");
         Log.d(TAG, "getInitMessages: " + query.count());
-        for (int i = 0; i < 1; i++) {
-            query.orderByAscending("createdAt");
-            query.findInBackground((messages, e) -> {
-                if (e == null) {
-                    for (ParseObject messages1 : messages) {
-                        if (UserTo.equals(messages1.getString("to")) && currentUser.getObjectId().equals(messages1.getString("from")) ||
-                                UserTo.equals(messages1.getString("from")) && currentUser.getObjectId().equals(messages1.getString("to"))) {
-                            if (UserTo.equals(messages1.get("to"))) {
-                                String Message = messages1.getString("message");
-                                LinearLayout Wrap = new LinearLayout(Screen);
-                                TextView Userinfo = new TextView(Screen);
-                                //translate
-                                translate(Message, nativeLang, nativeLang, new Handler.Callback() {
-                                    @Override
-                                    public boolean handleMessage(@NonNull android.os.Message msg) {
-                                        Bundle bundle = msg.getData();
-                                        String result = bundle.getString("result");
-                                        Log.d(TAG, "handleMessage: fdsfdsa " + result);
-                                        //Messages
-                                        Userinfo.setText(currentUser.getUsername() + ": " + result);
-                                        Userinfo.setPadding(300, 0, 0, 0);
-                                        Wrap.addView(Userinfo);
+        query.orderByAscending("createdAt");
 
-                                        Wrap.setOrientation(LinearLayout.VERTICAL);
-                                        LinearLayout Interaction = new LinearLayout(Screen);
-                                        Interaction.setOrientation(LinearLayout.VERTICAL);
-                                        //add wrapper to constrant
-                                        Wrap.addView(Interaction);
-                                        Messages.addView(Wrap);
-                                        return false;
-                                    }
-                                });
+        // Getting messages
+        query.findInBackground((messages, e) -> {
 
-                            } else {
-                                String Message = messages1.getString("message");
-                                LinearLayout Wrap = new LinearLayout(Screen);
-                                TextView Userinfo = new TextView(Screen);
-                                //translate
-                                translate(Message, nativeLang, currentUser.getString("nativelang"), new Handler.Callback() {
-                                    @Override
-                                    public boolean handleMessage(@NonNull android.os.Message msg) {
-                                        Bundle bundle = msg.getData();
-                                        String result = bundle.getString("result");
-                                        Log.d(TAG, "handleMessage: line 144 " + result);
-                                        Userinfo.setText(UserToName + ": " + result);
-                                        Userinfo.setPadding(300, 0, 0, 0);
-                                        Wrap.addView(Userinfo);
-
-                                        Wrap.setOrientation(LinearLayout.VERTICAL);
-                                        LinearLayout Interaction = new LinearLayout(Screen);
-                                        Interaction.setOrientation(LinearLayout.VERTICAL);
-                                        //add wrapper to constrant
-                                        Wrap.addView(Interaction);
-                                        Messages.addView(Wrap);
-                                        return false;
-                                    }
-                                });
-                            }
-
-                        }
-                    }
-                    activity.runOnUiThread(() -> {
-                        if (Messages.getParent() != null) {
-                            ((ViewGroup) Messages.getParent()).removeView(Messages); // <- fix
-                        }
-                        //add to Main Constraint which displays on fragment;
-                        linearLay.addView(Messages);
-                    });
-                } else {
-                }
-            });
-        }
-    }
-
-    public void addMessageLayout(String m){
-        LinearLayout Messages = new LinearLayout(Screen);
-        Messages.setOrientation(LinearLayout.VERTICAL);
-        String Message = m;
-        LinearLayout Wrap = new LinearLayout(Screen);
-        TextView Userinfo = new TextView(Screen);
-        Userinfo.setText(currentUser.getUsername() + ": " + Message);
-        Userinfo.setPadding(300, 0, 0, 0);
-        Wrap.addView(Userinfo);
-
-        Wrap.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout Interaction = new LinearLayout(Screen);
-        Interaction.setOrientation(LinearLayout.VERTICAL);
-        //add wrapper to constrant
-        Wrap.addView(Interaction);
-        Messages.addView(Wrap);
-
-        activity.runOnUiThread(() -> {
-            if (Messages.getParent() != null) {
-                ((ViewGroup) Messages.getParent()).removeView(Messages); // <- fix
+            if (e != null) {
+                Log.e(TAG, "Failed to get messages: " + e.getMessage());
+                return;
             }
-            //add to Main Constraint which displays on fragment;
-            linearLay.addView(Messages);
+
+            String currUserId = ParseUser.getCurrentUser().getObjectId();
+            String currUserLang = ParseUser.getCurrentUser().getString("nativelang");
+            String recipientId = UserTo;
+
+            ArrayList<ParseObject> msgs;
+
+            for (ParseObject m : messages) {
+
+                // getting the user ids
+                String mToId = m.getString("to");
+                String mFromId = m.getString("from");
+
+                // skip if message doesn't involve user
+                if (!matchUser(currUserId, mFromId, mToId)) continue;
+
+                // skip if message doesn't involve recipient
+                if (!matchUser(recipientId, mFromId, mToId)) continue;
+
+                // aliases for languages
+                String fromLang, toLang;
+
+                // if user is the sender
+                if (mFromId.equals(currUserId)) {
+                    fromLang = currUserLang;
+                    toLang = currUserLang;
+                }
+                // if the recipient is the sender
+                else {
+                    fromLang = nativeLang;
+                    toLang = currUserLang;
+                }
+
+                // get message
+                String Message = m.getString("message");
+                LinearLayout Wrap = new LinearLayout(Screen);
+                TextView Userinfo = new TextView(Screen);
+
+                //translate
+                translate(Message, fromLang, toLang, (msg) -> {
+                    Bundle bundle = msg.getData();
+                    String result = bundle.getString("result");
+                    Log.d(TAG, "handleMessage: line 144 " + result);
+                    Userinfo.setText(UserToName + ": " + result);
+                    Userinfo.setPadding(300, 0, 0, 0);
+                    Wrap.addView(Userinfo);
+
+                    Wrap.setOrientation(LinearLayout.VERTICAL);
+                    LinearLayout Interaction = new LinearLayout(Screen);
+                    Interaction.setOrientation(LinearLayout.VERTICAL);
+                    //add wrapper to constrant
+                    Wrap.addView(Interaction);
+                    Messages.addView(Wrap);
+                    return false;
+                });
+            }
+
+            activity.runOnUiThread(() -> {
+                if (Messages.getParent() != null) {
+                    ((ViewGroup) Messages.getParent()).removeView(Messages); // <- fix
+                }
+                //add to Main Constraint which displays on fragment;
+                linearLay.addView(Messages);
+            });
+
         });
     }
 }
