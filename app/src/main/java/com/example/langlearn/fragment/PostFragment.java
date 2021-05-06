@@ -1,4 +1,4 @@
-package com.example.langlearn.fragment;
+package com.example.langlearn.Fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,10 +6,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,7 +39,11 @@ import com.parse.SaveCallback;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link PostFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class PostFragment extends Fragment {
 
     ImageButton CreatePOST;
@@ -49,18 +56,49 @@ public class PostFragment extends Fragment {
     String post_comment = "";
     ParseUser user;
     Context screen;
-    int screen_width = 0;
-    int screen_height = 0;
+    int screen_width =0;
+    int screen_height=0;
+    WindowManager windowManager;
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+
+    public PostFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment PostFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static PostFragment newInstance(String param1, String param2) {
+        PostFragment fragment = new PostFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
-        screen = activity.getApplicationContext();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screen_width = displayMetrics.widthPixels;
         screen_height = displayMetrics.heightPixels;
+
     }
 
     @Override
@@ -73,6 +111,8 @@ public class PostFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        alert = new Dialog(view.getContext());
+        screen = view.getContext();
         board = view.findViewById(R.id.post_act_board);
         ll = view.findViewById(R.id.ll);
 
@@ -111,6 +151,7 @@ public class PostFragment extends Fragment {
         get_post();
 
     }
+
 
     public void Post_Comment(String OG_ID){
         ParseObject soccerPlayers = new ParseObject("Comments");
@@ -176,8 +217,8 @@ public class PostFragment extends Fragment {
                     if (e == null) {
                         String return_Post = player.getString("Post");
                         String Orgin_post = player.getString("User") + player.getString("Post");
-                        LinearLayout tmp = PostFrame(return_Post, Orgin_post);
-                        Post.addView(tmp);
+                        //LinearLayout tmp = ;
+                        Post.addView(PostFrame(return_Post, Orgin_post));
                     } else {
                         // Something is wrong
                         return;
@@ -192,6 +233,10 @@ public class PostFragment extends Fragment {
     }
 
     public void View_Comment(String OG_post,String Origin_post){
+        //
+
+
+
         //get content
 
         alert.dismiss();
@@ -207,15 +252,28 @@ public class PostFragment extends Fragment {
         LinearLayout tmp = new LinearLayout(screen);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tmp.setLayoutParams(params);
-
+        alert.setCancelable(true);
         query.findInBackground(new FindCallback<ParseObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
+                int i =1;
+                tmp.setOrientation(LinearLayout.VERTICAL);
+                Button close = new Button(screen);
+                close.setOnClickListener(v1->{
+                    alert.dismiss();
+                });
+                close.setText("X");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    close.setBackgroundColor(Color.RED);
+                }
+                tmp.addView(close,0);
                 for(ParseObject comments : objects) {
                     if (e == null) {
                         String return_Post = comments.getString("Comment");
-                        tmp.addView(PostFrame(return_Post, ""));
+                        tmp.addView(PostFrame(return_Post, ""),i++);
                         Log.d("Post", tmp.getChildCount() + " " + return_Post);
+
                         // return;
                     }
                 }

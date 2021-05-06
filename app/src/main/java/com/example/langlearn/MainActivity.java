@@ -8,9 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.langlearn.Fragment.PostFragment;
 import com.example.langlearn.fragment.ContactsFragment;
 import com.example.langlearn.fragment.HomeFragment;
-import com.example.langlearn.fragment.PostFragment;
+
 import com.example.langlearn.fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
