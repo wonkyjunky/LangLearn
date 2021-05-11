@@ -107,4 +107,42 @@ public class Util {
         }).start();
     }
 
+    public static void translate2(String text, String codeFrom, String codeTo) {
+        // memory safety
+        if (text == null || codeFrom == null || codeTo == null) return;
+
+        // nothing to do
+        if (text.isEmpty() || codeFrom.isEmpty() || codeTo.isEmpty()) return;
+
+        // creating callback handler
+
+        new Thread(() -> {
+
+            String result;
+            // if translating to same langue, return origin text
+            if (codeFrom.equals(codeTo)) {
+                result = text;
+            }
+            else
+            {
+                Menu_Papago papago = new Menu_Papago();
+                // if translating between non-korean languages
+                if (!codeFrom.equals(KOREAN) && !codeTo.equals(KOREAN)) {
+
+                    String intermediate = papago.getTranslation(text, codeFrom, KOREAN);
+                    result = papago.getTranslation(intermediate, KOREAN, codeTo);
+
+                    // if translating to or from korean
+                } else {
+
+                    result = papago.getTranslation(text, codeFrom, codeTo);
+                }
+            }
+
+
+        }).start();
+    }
+
+
+
 }

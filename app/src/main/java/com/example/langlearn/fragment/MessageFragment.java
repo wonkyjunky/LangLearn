@@ -1,6 +1,8 @@
 package com.example.langlearn.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,43 +15,33 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-<<<<<<< Updated upstream
-=======
 import com.example.langlearn.Adapter.MessageAdapter;
 import com.example.langlearn.model.Message;
 import com.parse.FindCallback;
-
-
->>>>>>> Stashed changes
 import com.example.langlearn.R;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.livequery.ParseLiveQueryClient;
 import com.parse.livequery.SubscriptionHandling;
-
-<<<<<<< Updated upstream
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.langlearn.Util.translate;
-=======
-import java.util.ArrayList;
-import java.util.List;
->>>>>>> Stashed changes
 
 public class MessageFragment extends Fragment {
     ParseUser currentUser;
     RecyclerView rvMessage;
     EditText text;
     Button send;
-    List<Message> mMessages;
+    List<com.example.langlearn.model.Message> mMessages;
     MessageAdapter messageAdapter;
 
-//    String nativeLang;
+    String nativeLang;
     String UserTo;
     String UserToLang;
     String UserToName;
@@ -72,16 +64,20 @@ public class MessageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        layout = view.findViewById(R.id.LayoutM);
-//        linearLay = view.findViewById(R.id.MessageLayout);
-//        send = view.findViewById(R.id.sendMessageButt);
-//        text = view.findViewById(R.id.messageText);
-//        rvLayout = view.findViewById(R.id.MessageLayout);
+
+        rvMessage = view.findViewById(R.id.rvMessage);
+        mMessages = new ArrayList<>();
+        messageAdapter = new MessageAdapter(getContext(), mMessages);
+        rvMessage.setAdapter(messageAdapter);
+        rvMessage.setLayoutManager(new LinearLayoutManager(getContext()));
+        messageAdapter.notifyDataSetChanged();
+        rvMessage.getLayoutManager().scrollToPosition(messageAdapter.getItemCount()-1);
         currentUser = ParseUser.getCurrentUser();
         Bundle args = getArguments();
+        send = view.findViewById(R.id.sendMessageButt);
+        text = view.findViewById(R.id.messageText);
         UserTo = args.getString("OID");
         UserToName = args.getString("name");
-<<<<<<< Updated upstream
         nativeLang = args.getString("lang");
         Log.d(TAG, "fdsafdsa: " + nativeLang);
 
@@ -99,33 +95,24 @@ public class MessageFragment extends Fragment {
         try {
             parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient(new URI("wss://langlearn.b4a.io/"));
             if (parseLiveQueryClient != null) {
-                ParseQuery<ParseObject> parseQuery = new ParseQuery("Messages");
+                ParseQuery<com.example.langlearn.model.Message> parseQuery = new ParseQuery("Messages");
                 parseQuery.orderByAscending("createdAt");
-                SubscriptionHandling<ParseObject> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+                SubscriptionHandling<com.example.langlearn.model.Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
 
-                subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new SubscriptionHandling.HandleEventCallback<ParseObject>() {
+                subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new SubscriptionHandling.HandleEventCallback<com.example.langlearn.model.Message>() {
                     @Override
-                    public void onEvent(ParseQuery<ParseObject> query, final ParseObject object) {
+                    public void onEvent(ParseQuery<com.example.langlearn.model.Message> query, final com.example.langlearn.model.Message object) {
                         Handler handler = new Handler(Looper.getMainLooper());
                         handler.post(new Runnable() {
                             public void run() {
-                                ParseObject o = object;
+                                com.example.langlearn.model.Message o = object;
                                 Log.d(TAG, "run: LIVEQUERY???" + object.getString("message"));
-                                LinearLayout Messages = new LinearLayout(Screen);
-                                Messages.setOrientation(LinearLayout.VERTICAL);
                                 if (UserTo.equals(o.getString("to")) && currentUser.getObjectId().equals(o.getString("from")) ||
                                         UserTo.equals(o.getString("from")) && currentUser.getObjectId().equals(o.getString("to"))) {
                                     Log.d(TAG, "run: fdsfdsafdas");
-                                    MessageFragment mf = new MessageFragment();
-                                    Bundle arguments = new Bundle();
-                                    arguments.putString("OID", UserTo);
-                                    arguments.putString("name",UserToName);
-                                    arguments.putString("lang",nativeLang);
-                                    mf.setArguments(arguments);
-                                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, mf).addToBackStack("name");
-                                    fragmentTransaction.commit();
-
-
+                                    mMessages.add(object);
+                                    messageAdapter.notifyDataSetChanged();
+                                    rvMessage.getLayoutManager().scrollToPosition(messageAdapter.getItemCount()-1);
                                     }
                                 }
                         });
@@ -140,7 +127,7 @@ public class MessageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String msg = text.getText().toString();
-                ParseObject message = new ParseObject("Messages");
+                Message message = new Message();
                 message.put("message", msg);
                 message.put("to", UserTo);
                 message.put("from", currentUser.getObjectId());
@@ -159,152 +146,121 @@ public class MessageFragment extends Fragment {
     }
 
     public void getInitMessages() throws ParseException {
-        LinearLayout Messages = new LinearLayout(Screen);
-        Messages.setOrientation(LinearLayout.VERTICAL);
         Log.d(TAG, "getInitMessages: " + ParseUser.getCurrentUser().getObjectId());
-        ParseQuery<ParseUser> query = ParseQuery.getQuery("Messages");
+        ParseQuery<com.example.langlearn.model.Message> query = ParseQuery.getQuery("Messages");
         Log.d(TAG, "getInitMessages: " + query.count());
         query.orderByAscending("createdAt");
         // Getting messages
         query.findInBackground((messages, e) -> {
 
-            if (e != null) {
-                Log.e(TAG, "Failed to get messages: " + e.getMessage());
-                return;
-            }
+                    if (e != null) {
+                        Log.e(TAG, "Failed to get messages: " + e.getMessage());
+                        return;
+                    }
+                    String currUserId = ParseUser.getCurrentUser().getObjectId();
+                    String currUserLang = ParseUser.getCurrentUser().getString("nativelang");
+                    String recipientId = UserTo;
 
-            String currUserId = ParseUser.getCurrentUser().getObjectId();
-            String currUserLang = ParseUser.getCurrentUser().getString("nativelang");
-            String recipientId = UserTo;
+//            ArrayList<Message> relevantMessages = new ArrayList<>();
 
-            ArrayList<Message> relevantMessages = new ArrayList<>();
+            final String[] a = new String[1];
 
-            int i = 0;
-            for (ParseObject m : messages) {
-
-                // getting the user ids
-                String mToId = m.getString("to");
-                String mFromId = m.getString("from");
-
-                // skip if message doesn't involve user
-                if (!matchUser(currUserId, mFromId, mToId)) continue;
-
-                // skip if message doesn't involve recipient
-                if (!matchUser(recipientId, mFromId, mToId)) continue;
-
-                // aliases for languages
-                String fromLang, toLang, fromName;
-
-                // if user is the sender
-                if (mFromId.equals(currUserId)) {
-                    fromLang = currUserLang;
-                    fromName = ParseUser.getCurrentUser().getUsername();
-                    toLang = currUserLang;
+            ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
+            queryUser.whereMatches("objectId", UserTo);
+            queryUser.findInBackground(new FindCallback<ParseUser>() {
+                @Override
+                public void done(List<ParseUser> objects, ParseException e) {
+                     a[0] = objects.get(0).getString("nativelang");
                 }
-                // if the recipient is the sender
-                else {
-                    fromLang = nativeLang;
-                    fromName = UserToName;
-                    toLang = currUserLang;
-                }
+            });
 
-                // get message text
-                String text = m.getString("message");
 
-                relevantMessages.add(new Message(fromLang, toLang, fromName, text, i));
 
-                // message view
-                LinearLayout messageLayout = new LinearLayout(Screen);
-                messageLayout.setOrientation(LinearLayout.VERTICAL);
 
-                // message text view
-                TextView messageText = new TextView(Screen);
-                messageText.setTag("msg" + i);
-                messageText.setPadding(300, 0, 0, 0);
-                messageLayout.addView(messageText);
 
-                // interaction?
-                LinearLayout interaction = new LinearLayout(Screen);
-                interaction.setOrientation(LinearLayout.VERTICAL);
-                messageLayout.addView(interaction);
 
-                // adding view to list
-                Messages.addView(messageLayout);
-
-                i += 1;
-            }
+                    for (Message messages1 : messages) {
+                        if (UserTo.equals(messages1.getString("to")) && currentUser.getObjectId().equals(messages1.getString("from")) ||
+                                UserTo.equals(messages1.getString("from")) && currentUser.getObjectId().equals(messages1.getString("to"))) {
+                            mMessages.add(messages1);
+                        }
+                    }
+                    Log.d(TAG, String.valueOf(mMessages.size()));
+                    messageAdapter.notifyDataSetChanged();
+                    rvMessage.getLayoutManager().scrollToPosition(messageAdapter.getItemCount()-1);
+                });
 
             // Display messages
 
-            for (Message m : relevantMessages) {
-
-                LinearLayout Wrap = new LinearLayout(Screen);
-                TextView Userinfo = new TextView(Screen);
-
-                //translate
-                translate(m.getText(), m.getFromLang(), m.getToLang(), (msg) -> {
-                    //translations[i] = new Translation()
-                    Bundle bundle = msg.getData();
-                    String result = bundle.getString("result");
-
-                    TextView messageText = new TextView(Screen);
-
-                    TextView textView = Messages.findViewWithTag("msg" + m.getIndex());
-
-                    textView.setText(m.getFromName() + ": " + result);
-
-                    Log.d(TAG, "handleMessage: line 144 " + result);
-
-                    return false;
-                });
-            }
-
-            activity.runOnUiThread(() -> {
-                if (Messages.getParent() != null) {
-                    ((ViewGroup) Messages.getParent()).removeView(Messages); // <- fix
-                }
-                //add to Main Constraint which displays on fragment;
-                linearLay.addView(Messages);
-            });
-
-        });
+//            for (Message m : relevantMessages) {
+//
+//                LinearLayout Wrap = new LinearLayout(Screen);
+//                TextView Userinfo = new TextView(Screen);
+//
+//                //translate
+//                translate(m.getText(), m.getFromLang(), m.getToLang(), (msg) -> {
+//                    //translations[i] = new Translation()
+//                    Bundle bundle = msg.getData();
+//                    String result = bundle.getString("result");
+//
+//                    TextView messageText = new TextView(Screen);
+//
+//                    TextView textView = Messages.findViewWithTag("msg" + m.getIndex());
+//
+//                    textView.setText(m.getFromName() + ": " + result);
+//
+//                    Log.d(TAG, "handleMessage: line 144 " + result);
+//
+//                    return false;
+//                });
+//            }
+//
+//            activity.runOnUiThread(() -> {
+//                if (Messages.getParent() != null) {
+//                    ((ViewGroup) Messages.getParent()).removeView(Messages); // <- fix
+//                }
+//                //add to Main Constraint which displays on fragment;
+//                linearLay.addView(Messages);
+//            });
+//
+//        });
     }
 
-    private class Message {
+//    private class Message {
+//
+//        private String fromLang, toLang, fromName, text;
+//        int index;
+//
+//        public Message(String fromLang, String toLang, String fromName, String text, int index) {
+//            this.fromLang = fromLang;
+//            this.toLang = toLang;
+//            this.fromName = fromName;
+//            this.text = text;
+//            this.index = index;
+//        }
+//
+//        public String getFromLang() {
+//            return fromLang;
+//        }
+//
+//        public String getToLang() {
+//            return toLang;
+//        }
+//
+//        public String getFromName() {
+//            return fromName;
+//        }
+//
+//        public String getText() {
+//            return text;
+//        }
+//
+//        public int getIndex() {
+//            return index;
+//        }
+//    }
 
-        private String fromLang, toLang, fromName, text;
-        int index;
 
-        public Message(String fromLang, String toLang, String fromName, String text, int index) {
-            this.fromLang = fromLang;
-            this.toLang = toLang;
-            this.fromName = fromName;
-            this.text = text;
-            this.index = index;
-        }
-
-        public String getFromLang() {
-            return fromLang;
-        }
-
-        public String getToLang() {
-            return toLang;
-        }
-
-        public String getFromName() {
-            return fromName;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-    }
-
-=======
 //        nativeLang = args.getString("lang");
 //        Log.d(TAG, "fdsafdsa: " + nativeLang);
 //
@@ -374,36 +330,36 @@ public class MessageFragment extends Fragment {
 //                });
 //            }
 //        });
-        rvMessage = view.findViewById(R.id.rvMessage);
-        mMessages = new ArrayList<>();
-        messageAdapter = new MessageAdapter(getContext(), mMessages);
-        rvMessage.setAdapter(messageAdapter);
-        rvMessage.setLayoutManager(new LinearLayoutManager(getContext()));
-        messageAdapter.notifyDataSetChanged();
-        rvMessage.getLayoutManager().scrollToPosition(0);
-        queryMessage();
-    }
-
-    private void queryMessage() {
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        query.orderByAscending("createdAt");
-        query.findInBackground(new FindCallback<Message>() {
-            @Override
-            public void done(List<Message> messages, ParseException e) {
-                if (e != null){
-                    Log.e(TAG, "Issue with getting Messages", e);
-                }
-                for (Message messages1 : messages) {
-                    if (UserTo.equals(messages1.getString("to")) && currentUser.getObjectId().equals(messages1.getString("from")) ||
-                            UserTo.equals(messages1.getString("from")) && currentUser.getObjectId().equals(messages1.getString("to"))) {
-                            mMessages.add(messages1);
-                        }
-                    }
-                Log.d(TAG, String.valueOf(mMessages.size()));
-                messageAdapter.notifyDataSetChanged();
-            }
-        });
-    }
+//        rvMessage = view.findViewById(R.id.rvMessage);
+//        mMessages = new ArrayList<>();
+//        messageAdapter = new MessageAdapter(getContext(), mMessages);
+//        rvMessage.setAdapter(messageAdapter);
+//        rvMessage.setLayoutManager(new LinearLayoutManager(getContext()));
+//        messageAdapter.notifyDataSetChanged();
+//        rvMessage.getLayoutManager().scrollToPosition(0);
+//        queryMessage();
+//    }
+//
+//    private void queryMessage() {
+//        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+//        query.orderByAscending("createdAt");
+//        query.findInBackground(new FindCallback<Message>() {
+//            @Override
+//            public void done(List<Message> messages, ParseException e) {
+//                if (e != null){
+//                    Log.e(TAG, "Issue with getting Messages", e);
+//                }
+//                for (Message messages1 : messages) {
+//                    if (UserTo.equals(messages1.getString("to")) && currentUser.getObjectId().equals(messages1.getString("from")) ||
+//                            UserTo.equals(messages1.getString("from")) && currentUser.getObjectId().equals(messages1.getString("to"))) {
+//                            mMessages.add(messages1);
+//                        }
+//                    }
+//                Log.d(TAG, String.valueOf(mMessages.size()));
+//                messageAdapter.notifyDataSetChanged();
+//            }
+//        });
+//    }
 
 //    public void getInitMessages() throws ParseException {
 //        LinearLayout Messages = new LinearLayout(Screen);
@@ -510,5 +466,4 @@ public class MessageFragment extends Fragment {
 //            linearLay.addView(Messages);
 //        });
 //    }
->>>>>>> Stashed changes
 }
