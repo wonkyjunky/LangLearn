@@ -9,12 +9,15 @@
         android:id="@+id/signup_password_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:width="192dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/signup_password_text"
         app:layout_constraintTop_toBottomOf="@+id/signup_username_edit" />
 
@@ -22,12 +25,15 @@
         android:id="@+id/signup_username_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="92dp"
+        android:layout_marginEnd="32dp"
         android:width="192dp"
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/signup_username_text"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,11 +41,14 @@
         android:id="@+id/signup_confirm_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="32dp"
         android:width="192dp"
         android:ems="10"
         android:hint="Confirm Password"
         android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/signup_password_text"
         app:layout_constraintTop_toBottomOf="@+id/signup_password_edit" />
 
@@ -47,8 +56,10 @@
         android:id="@+id/signup_lang_spinner"
         android:layout_width="192dp"
         android:layout_height="50dp"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/signup_lang_text"
         app:layout_constraintTop_toBottomOf="@+id/signup_confirm_edit" />
 
