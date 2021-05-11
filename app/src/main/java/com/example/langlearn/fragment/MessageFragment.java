@@ -136,6 +136,7 @@ public class MessageFragment extends Fragment {
                         Log.d(TAG, "onClick: ");
                     }
                 });
+                text.setText("");
             }
         });
     }
