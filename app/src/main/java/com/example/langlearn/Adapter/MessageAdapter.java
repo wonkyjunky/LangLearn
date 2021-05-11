@@ -58,6 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         Log.d("MESSAGE", message.getKeyMessage());
         ViewHoldertwo ViewHoldertwo = (ViewHoldertwo) holder;
         final String[] otherImage = new String[1];
+        ViewHoldertwo.tvMessage.setText(message.getKeyMessage());
         String meImage;
 
         final boolean isMe = message.get("from").equals(ParseUser.getCurrentUser().getObjectId());
@@ -69,7 +70,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
             meImage = ParseUser.getCurrentUser().getString(Util.PROFILE_IMG);
             final ImageView profileView = ViewHoldertwo.ivMe;
             Glide.with(mContext).load(meImage).into(profileView);
-            ViewHoldertwo.tvMessage.setText(message.getKeyMessage());
         } else {
             ViewHoldertwo.ivOther.setVisibility(View.VISIBLE);
             ViewHoldertwo.ivMe.setVisibility(View.GONE);
