@@ -31,7 +31,6 @@ import com.parse.livequery.SubscriptionHandling;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
 import java.util.ArrayList;
 
 import static com.example.langlearn.Util.translate;
@@ -140,7 +139,6 @@ public class MessageFragment extends Fragment {
                 message.put("message", msg);
                 message.put("to", UserTo);
                 message.put("from", currentUser.getObjectId());
-                message.put("time", Instant.now().getEpochSecond());
                 message.saveInBackground(e -> {
                     if (e == null) {
                         Log.d(TAG, "onClick: ");

@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        boolean newAccount = getIntent().getBooleanExtra("newacc", false);
 
         ParseUser u = ParseUser.getCurrentUser();
 
@@ -57,12 +56,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        if (newAccount) {
-            bottomNavigationView.setSelectedItemId(R.id.action_profile);
-        } else {
-            bottomNavigationView.setSelectedItemId(R.id.action_home);
-        }
-
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
     }
 }
 
