@@ -28,6 +28,8 @@ import com.parse.ParseUser;
 import java.net.URL;
 import java.util.List;
 
+import static com.example.langlearn.Util.translate;
+
 public class MessageAdapter extends RecyclerView.Adapter {
 
     Context mContext;
@@ -55,7 +57,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
         Message message = mMessages.get(position);
         Log.d("MESSAGE", message.getKeyMessage());
         ViewHoldertwo ViewHoldertwo = (ViewHoldertwo) holder;
-        ViewHoldertwo.tvMessage.setText(message.getKeyMessage());
         final String[] otherImage = new String[1];
         String meImage;
 
@@ -68,6 +69,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             meImage = ParseUser.getCurrentUser().getString(Util.PROFILE_IMG);
             final ImageView profileView = ViewHoldertwo.ivMe;
             Glide.with(mContext).load(meImage).into(profileView);
+            ViewHoldertwo.tvMessage.setText(message.getKeyMessage());
         } else {
             ViewHoldertwo.ivOther.setVisibility(View.VISIBLE);
             ViewHoldertwo.ivMe.setVisibility(View.GONE);
@@ -81,6 +83,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         otherImage[0] = objects.get(0).getString(Util.PROFILE_IMG);
                         final ImageView profileView = ViewHoldertwo.ivOther;
                         Glide.with(mContext).load(otherImage[0]).into(profileView);
+                        translate(message.getString("message"), objects.get(0).getString("nativelang"), ParseUser.getCurrentUser().getString("nativelang"), (msg)-> {
+
+                            ViewHoldertwo.tvMessage.setText(msg.getData().getString("result"));
+                            return false;
+                        });
                     } else {
                         // error
                     }

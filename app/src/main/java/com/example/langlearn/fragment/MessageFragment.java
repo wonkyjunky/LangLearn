@@ -164,24 +164,9 @@ public class MessageFragment extends Fragment {
 //            ArrayList<Message> relevantMessages = new ArrayList<>();
 
             final String[] a = new String[1];
-
-            ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
-            queryUser.whereMatches("objectId", UserTo);
-            queryUser.findInBackground(new FindCallback<ParseUser>() {
-                @Override
-                public void done(List<ParseUser> objects, ParseException e) {
-                     a[0] = objects.get(0).getString("nativelang");
-                }
-            });
-
-
-
-
-
-
-                    for (Message messages1 : messages) {
-                        if (UserTo.equals(messages1.getString("to")) && currentUser.getObjectId().equals(messages1.getString("from")) ||
-                                UserTo.equals(messages1.getString("from")) && currentUser.getObjectId().equals(messages1.getString("to"))) {
+                for (Message messages1 : messages) {
+                    if (UserTo.equals(messages1.getString("to")) && currentUser.getObjectId().equals(messages1.getString("from")) ||
+                            UserTo.equals(messages1.getString("from")) && currentUser.getObjectId().equals(messages1.getString("to"))) {
                             mMessages.add(messages1);
                         }
                     }
